@@ -11,7 +11,7 @@ from uuid import UUID
 router = APIRouter()
 
 
-@router.get("/users", response_model=UserResponse)
+@router.get("/users", response_model=List[UserResponse])
 def get_users(db: Session = Depends(get_db)):
     users = db.query(User).all()
     return users
