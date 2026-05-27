@@ -15,3 +15,31 @@ router = APIRouter()
 def get_tables(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     tables = db.query(P_Table).filter(P_Table.user_id == user.id).all()
     return tables
+
+
+@router.get("/p_tables/{id}", response_model=PTablesResponse)
+def get_table(
+    id: int, user: User = Depends(get_current_user), db: Session = Depends(get_db)
+):
+    table = (
+        db.query(P_Table).filter(P_Table.user_id == user.id, P_Table.id == id).first()
+    )
+    return table
+
+
+@router.post("/p_tables", response_model=PTablesResponse)
+def new_p_table(
+    new_p_table: PTablesCreate,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    new_p_table = P_Table(
+        rating=new_p_table.rating,
+        location=new_p_table.location,
+        table_size=new_p_table.table_size,
+        user_id=user.id,
+    )
+    db.add(new_p_table)
+    db.commit()
+    db.refresh(new_p_table)
+    return new_p_table
