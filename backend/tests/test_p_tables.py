@@ -24,14 +24,26 @@ def auth_token():
     )
     print(login_response.status_code)
     print(login_response.json())
-    token = login_response.json()["access_token"]
-    yield token
 
-    client.delete("users/me", headers={"Authorization": f"bearer{token}"})
+    token = login_response.json()["access_token"]
+
+    client.post(
+        "/p_tables",
+        json={
+            "rating": 1.2,
+            "location": "Chicago",
+            "table_size": 1.2,
+        },
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    yield token
 
     db = next(get_db())
     from app.models.user import User
+    from app.models.p_table import P_Table
 
+    user = db.query(User).filter(User.email == "zval321@gmail.com").first()
+    db.query(P_Table).filter(P_Table.user_id == user.id).delete()
     db.query(User).filter(User.email == "zval321@gmail.com").delete()
     db.commit()
 
@@ -44,3 +56,20 @@ def test_get_p_tables(auth_token):
 
     assert response.status_code == 200
     assert isinstance(response.json(), list)
+
+
+def test_get_p_table(auth_token):
+    new_table = client.post(
+        "/p_tables",
+        json={"rating": 1.2, "location": "Chicago", "table_size": 1.2},
+        headers={"Authorization": f"Bearer {auth_token}"},
+    )
+    print(new_table.json())
+    table_id = new_table.json()["id"]
+
+    response = client.get(
+        f"/p_tables/{table_id}", headers={"Authorization": f"Bearer {auth_token}"}
+    )
+    print(response.json())
+    assert response.status_code == 200
+    assert isinstance(response.json(), dict)

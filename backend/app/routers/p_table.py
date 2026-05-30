@@ -19,7 +19,7 @@ def get_tables(user: User = Depends(get_current_user), db: Session = Depends(get
 
 @router.get("/p_tables/{id}", response_model=PTablesResponse)
 def get_table(
-    id: int, user: User = Depends(get_current_user), db: Session = Depends(get_db)
+    id: UUID, user: User = Depends(get_current_user), db: Session = Depends(get_db)
 ):
     table = (
         db.query(P_Table).filter(P_Table.user_id == user.id, P_Table.id == id).first()
