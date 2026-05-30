@@ -27,6 +27,8 @@ def auth_token():
     token = login_response.json()["access_token"]
     yield token
 
+    client.delete("users/me", headers={"Authorization": f"bearer{token}"})
+
     db = next(get_db())
     from app.models.user import User
 
