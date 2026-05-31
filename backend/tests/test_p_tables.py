@@ -22,8 +22,6 @@ def auth_token():
     login_response = client.post(
         "/auth/login", json={"email": "zval321@gmail.com", "password": "password123"}
     )
-    print(login_response.status_code)
-    print(login_response.json())
 
     token = login_response.json()["access_token"]
 
@@ -64,12 +62,22 @@ def test_get_p_table(auth_token):
         json={"rating": 1.2, "location": "Chicago", "table_size": 1.2},
         headers={"Authorization": f"Bearer {auth_token}"},
     )
-    print(new_table.json())
     table_id = new_table.json()["id"]
 
     response = client.get(
         f"/p_tables/{table_id}", headers={"Authorization": f"Bearer {auth_token}"}
     )
-    print(response.json())
     assert response.status_code == 200
     assert isinstance(response.json(), dict)
+
+
+def test_delete_pool_table(auth_token):
+    table_id = client.get(
+        "/p_tables", headers={"Authorization": f"Bearer {auth_token}"}
+    ).json()[0]["id"]
+
+    response = client.delete(
+        f"/p_tables/{table_id}", headers={"Authorization": f"Bearer {auth_token}"}
+    )
+
+    assert response.status_code == 200

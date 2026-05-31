@@ -43,3 +43,15 @@ def new_p_table(
     db.commit()
     db.refresh(new_p_table)
     return new_p_table
+
+
+@router.delete("/p_tables/{id}", response_model=PTablesResponse)
+def delete_p_table(id: UUID, db: Session = Depends(get_db)):
+    db_p_table = db.query(P_Table).filter(P_Table.id == id).first()
+
+    if not db_p_table:
+        raise HTTPException(status_code=404, detail="Pool table not found.")
+
+    db.delete(db_p_table)
+    db.commit()
+    return db_p_table
