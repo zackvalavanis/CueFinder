@@ -2,9 +2,12 @@ import { useState } from "react"
 import { Eye, EyeOff } from 'lucide-react'
 import './SignUp.css'
 import type { SignupPage } from "../../types/types"
+import { toast } from "react-toastify"
+import { useNavigate } from "react-router"
 
 export function SignUp() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [formData, setFormData] = useState<SignupPage>({
     "first_name": "",
@@ -20,7 +23,7 @@ export function SignUp() {
       const res = await fetch('http://localhost:8000/users', {
         "method": "POST",
         "headers": {
-          "Content Type": "application/json"
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           first_name: formData.first_name,
@@ -29,6 +32,15 @@ export function SignUp() {
           password: formData.password
         })
       })
+
+      if (!res.ok) {
+        toast.error("There was an error on signup")
+        return
+      }
+
+      toast.success("You have successfully signed up!")
+
+      navigate('/login')
     } catch (error) {
       console.error("Error on sign up", error)
     }
@@ -42,12 +54,26 @@ export function SignUp() {
       }}
         className='signup-form'>
         <div className='signup-inputs'>
-          <input type='text' name='first_name' placeholder="First Name"></input>
-          <input type='text' name='last_name' placeholder="Last Name"></input>
-          <input type='email' name='email' placeholder="Email"></input>
-
-
-
+          <input
+            type='text'
+            name='first_name'
+            placeholder="First Name"
+            value={formData.first_name}
+            onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}>
+          </input>
+          <input
+            type='text'
+            name='last_name'
+            placeholder="Last Name"
+            value={formData.last_name}
+            onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}></input>
+          <input
+            type='email'
+            name='email'
+            placeholder="Email"
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          ></input>
         </div>
         <div className='input-wrapper'>
           <input
