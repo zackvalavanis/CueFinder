@@ -6,9 +6,9 @@ export interface LoginPage {
 export interface AuthContextType {
   token: string | null
   login: (token: string) => Promise<void>
-  // logout: () => void
-  // isLoading: boolean
-  // user: User | null
+  logout: () => void
+  isLoading: boolean
+  user: User | null
 }
 
 export interface User {
