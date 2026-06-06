@@ -4,6 +4,7 @@ import './SignUp.css'
 import type { SignupPage } from "../../types/types"
 
 export function SignUp() {
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [formData, setFormData] = useState<SignupPage>({
     "first_name": "",
@@ -12,8 +13,25 @@ export function SignUp() {
     "password": ""
   })
 
-  const handleSignUp = (formData: SignupPage) => {
-    console.log(formData)
+  const handleSignUp = async (formData: SignupPage) => {
+    setIsLoading(true)
+
+    try {
+      const res = await fetch('http://localhost:8000/users', {
+        "method": "POST",
+        "headers": {
+          "Content Type": "application/json"
+        },
+        body: JSON.stringify({
+          first_name: formData.first_name,
+          last_name: formData.last_name,
+          email: formData.email,
+          password: formData.password
+        })
+      })
+    } catch (error) {
+      console.error("Error on sign up", error)
+    }
   }
 
   return (
