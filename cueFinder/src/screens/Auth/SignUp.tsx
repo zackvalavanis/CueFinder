@@ -12,12 +12,25 @@ export function SignUp() {
     "password": ""
   })
 
+  const handleSignUp = (formData: SignupPage) => {
+    console.log(formData)
+  }
+
   return (
-    <div>
-      <form>
-        <input type='text' name='first_name' placeholder="First Name"></input>
-        <input type='text' name='last_name' placeholder="Last Name"></input>
-        <input type='email' name='email' placeholder="Email"></input>
+    <div className='signup-page'>
+      <form onSubmit={(e) => {
+        e.preventDefault()
+        handleSignUp(formData)
+      }}
+        className='signup-form'>
+        <div className='signup-inputs'>
+          <input type='text' name='first_name' placeholder="First Name"></input>
+          <input type='text' name='last_name' placeholder="Last Name"></input>
+          <input type='email' name='email' placeholder="Email"></input>
+
+
+
+        </div>
         <div className='input-wrapper'>
           <input
             name='password'
@@ -30,9 +43,8 @@ export function SignUp() {
             {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
           </button>
         </div>
+        <button type='submit'>Sign Up</button>
       </form>
-
-
     </div>
   )
 }

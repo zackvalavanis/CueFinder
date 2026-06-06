@@ -1,3 +1,54 @@
+.signup-page {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  width: 550px;
+  padding: 40px;
+  /* use padding instead of fixed height */
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(142, 141, 141);
+  border-radius: 20px;
+}
+
+.signup-form form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.signup-inputs {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+}
+
+.signup-inputs input {
+  height: 40px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  padding: 0 12px;
+  box-sizing: border-box;
+}
+
+.signup-form button:not(.eye-toggle) {
+  width: 80%;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 20px;
+  margin: 8px auto 0 auto;
+}
+
 .input-wrapper {
   position: relative;
   width: 80%;
@@ -7,8 +58,8 @@
 .input-wrapper input {
   width: 100%;
   padding: 8px 40px 8px 12px;
-  /* right padding leaves room for the icon */
   border-radius: 6px;
+  box-sizing: border-box;
 }
 
 .eye-toggle {
