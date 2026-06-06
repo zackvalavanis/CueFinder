@@ -43,3 +43,8 @@
   transform: scale(1.05);
   text-decoration: underline;
 }
+
+.logged-in-right {
+  display: flex;
+  gap: 20px;
+}

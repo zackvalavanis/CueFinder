@@ -1,7 +1,17 @@
-export function SignUp() {
-  return (
-    <>
 
-    </>
+
+
+export function SignUp() {
+
+
+
+
+
+
+  return (
+    <div>
+
+
+    </div>
   )
 }
