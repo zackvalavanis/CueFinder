@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify"
 import './Login.css'
+import { Eye, EyeOff } from 'lucide-react'
 
 export function Login() {
   const { login } = useAuth();
@@ -13,6 +14,7 @@ export function Login() {
     "password": ""
   })
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState<boolean>(false)
 
   const handleLogin = async (formData: LoginPage) => {
     setLoading(true)
@@ -32,6 +34,7 @@ export function Login() {
 
       if (!res.ok) {
         console.error("There was an error")
+        toast.error("Error failed to log in")
         return
       }
 
@@ -63,23 +66,26 @@ export function Login() {
         }}>
 
           <input
+            className="email-input"
             name='email'
             type="email"
             placeholder="Email"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}>
           </input>
-
-          <input
-            name='password'
-            type='password'
-            placeholder="Password"
-            value={formData.password}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}>
-          </input>
+          <div className="input-wrapper">
+            <input
+              name='password'
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Password"
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}>
+            </input>
+            <button type='button' className='eye-toggle' onClick={() => setShowPassword(!showPassword)}>{showPassword ? <EyeOff size={16} /> : <Eye size={16} />}</button>
+          </div>
+          <button type='submit'>Login</button>
           <button>Log in with Apple</button>
           <button>Log in with Google</button>
-          <button type='submit'>Login</button>
 
         </form>
       </div>

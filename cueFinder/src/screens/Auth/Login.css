@@ -16,7 +16,7 @@
   width: 550px;
   align-items: center;
   justify-content: center;
-  background-color: black;
+  background-color: rgb(142, 141, 141);
   border-radius: 20px;
 }
 
@@ -27,7 +27,7 @@
   width: 100%;
 }
 
-.login-form input {
+.email-input {
   width: 80%;
   padding: 8px 12px;
   border-radius: 6px;
@@ -36,11 +36,36 @@
 }
 
 
-.login-form button {
+.login-form button:not(.eye-toggle) {
   width: 80%;
   padding: 8px 12px;
   cursor: pointer;
   border-radius: 20px;
   margin: 20px auto 0 auto;
-  /* space above button */
+}
+
+.input-wrapper {
+  position: relative;
+  width: 80%;
+  margin: 0 auto 20px auto;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 8px 40px 8px 12px;
+  /* right padding leaves room for the icon */
+  border-radius: 6px;
+}
+
+.eye-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
 }
