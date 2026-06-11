@@ -18,8 +18,14 @@ def login(auth: LoginRequest, db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     if not verify_password(auth.password, user.hashed_password):
-        raise HTTPException(status_code=401, detial="Invalid credentials")
+        raise HTTPException(status_code=401, detail="Invalid credentials")
 
     token = create_access_token({"sub": user.email})
+    first_name = user.first_name
 
-    return {"access_token": token, "token_type": "bearer"}
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "first_name": first_name,
+        "last_name": user.last_name,
+    }

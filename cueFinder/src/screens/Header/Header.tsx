@@ -4,7 +4,7 @@ import { useAuth } from "../Components/useAuth"
 
 
 export function Header() {
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
 
   return (
     <div className='headernav'>
@@ -20,7 +20,10 @@ export function Header() {
 
         <div className="nav-bar-right">
           {user ? (
-            <Link to="/sign-up">Logout</Link>
+            <div className="logged-in-left">
+              <Link onClick={logout} to="/login">Logout</Link>
+              <Link to='/profile'>Profile</Link>
+            </div>
           ) : (
             <div className='logged-in-right' >
               <Link to='/login'>Login</Link>

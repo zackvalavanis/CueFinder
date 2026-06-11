@@ -44,7 +44,8 @@
   text-decoration: underline;
 }
 
-.logged-in-right {
+.logged-in-right,
+.logged-in-left {
   display: flex;
   gap: 20px;
 }

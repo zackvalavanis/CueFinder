@@ -45,7 +45,7 @@ export function Login() {
 
       console.log("LOGIN SUCCESS", data)
       login(data.access_token)
-      toast.success(`Logged in Successfully ${data.email}`)
+      toast.success(`Logged in Successfully ${data.first_name}`)
 
       navigate('/')
     } catch (error) {
