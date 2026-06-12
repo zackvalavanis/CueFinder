@@ -9,16 +9,8 @@ export function Header() {
   return (
     <div className='headernav'>
       <div className="nav-bar-container">
-        <div className='nav-bar-left'>
-          <Link to='/'>Home</Link>
-        </div>
-
-        <div className="nav-bar-center">
-
-
-        </div>
-
         <div className="nav-bar-right">
+          <Link to='/'>Home</Link>
           {user ? (
             <div className="logged-in-left">
               <Link onClick={logout} to="/login">Logout</Link>

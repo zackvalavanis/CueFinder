@@ -1,0 +1,161 @@
+.main-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  color: white;
+}
+
+/* ── Hero ── */
+.section1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  gap: 4.5rem;
+}
+
+.section1 h1 {
+  font-size: 64px;
+  font-weight: 800;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.665);
+  letter-spacing: -2px;
+  line-height: 1.1;
+  max-width: 700px;
+}
+
+.search_button {
+  display: flex;
+  gap: 0;
+  align-items: center;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.main-page input {
+  width: 380px;
+  height: 54px;
+  border: none;
+  background: rgba(0, 0, 0, 0.55);
+  color: white;
+  padding: 0 20px;
+  font-size: 16px;
+  outline: none;
+}
+
+.main-page input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.search_button button {
+  height: 54px;
+  width: 120px;
+  border: none;
+  background: #16a34a;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: background 0.2s;
+}
+
+.search_button button:hover {
+  background: #15803d;
+}
+
+/* ── Middle ── */
+.middle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100vh;
+  padding: 8rem 2rem;
+  background: rgba(0, 0, 0, 0.7);
+  gap: 3rem;
+}
+
+.middle-heading {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #4ade80;
+}
+
+.middle-title {
+  font-size: 40px;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: -1px;
+  color: white;
+  margin-top: -1.5rem;
+}
+
+.middle-middle {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 900px;
+}
+
+.middle-boxes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 3rem 2rem;
+  border-radius: 16px;
+  border: 1px solid rgba(74, 222, 128, 0.15);
+  background: rgba(22, 163, 74, 0.1);
+  text-align: center;
+  transition: transform 0.2s, border-color 0.2s, background 0.2s;
+  min-height: 280px;
+}
+
+.middle-boxes:hover {
+  transform: translateY(-6px);
+  border-color: rgba(74, 222, 128, 0.4);
+  background: rgba(22, 163, 74, 0.18);
+  cursor: pointer;
+}
+
+.middle-boxes .icon {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.middle-boxes h1 {
+  font-size: 12px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 300px;
+}
+
+/* ── Bottom ── */
+.section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  width: 100%;
+}
+
+.section h1 {
+  font-size: 25px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  text-align: center;
+  color: white;
+}

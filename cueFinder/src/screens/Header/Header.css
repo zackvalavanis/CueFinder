@@ -1,24 +1,10 @@
-.headernav {
-  background-color: rgb(10, 10, 10);
-}
-
 .nav-bar-container {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr;
   align-items: center;
   width: 80%;
   height: 100px;
   margin: 0 auto;
-}
-
-.nav-bar-left {
-  display: flex;
-  justify-content: flex-start;
-}
-
-.nav-bar-center {
-  display: flex;
-  justify-content: center;
 }
 
 .nav-bar-right {
@@ -28,17 +14,13 @@
 }
 
 
-.nav-bar-left a,
-.nav-bar-center a,
 .nav-bar-right a {
   text-decoration: none;
   font-family: Georgia, 'Times New Roman', Times, serif;
-  color: white;
+  color: rgb(0, 0, 0);
   font-size: 20px;
 }
 
-.nav-bar-left a:hover,
-.nav-bar-center a:hover,
 .nav-bar-right a:hover {
   transform: scale(1.05);
   text-decoration: underline;

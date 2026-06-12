@@ -9,6 +9,7 @@ import { SignUp } from "./screens/Auth/SignUp"
 import { ToastContainer } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
 import { Profile } from "./screens/Profile/Profile"
+import { Results } from "./screens/Results/Results"
 
 function App() {
 
@@ -25,7 +26,8 @@ function App() {
         { path: '/', element: <Main /> },
         { path: '/login', element: <Login /> },
         { path: '/sign-up', element: <SignUp /> },
-        { path: '/profile', element: <Profile /> }
+        { path: '/profile', element: <Profile /> },
+        { path: '/results', element: <Results /> }
       ]
     }
   ])
