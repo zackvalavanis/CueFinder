@@ -46,9 +46,8 @@ async def nearby(body: LatLng):
             "https://maps.googleapis.com/maps/api/place/nearbysearch/json",
             params={
                 "location": f"{body.lat},{body.lng}",
-                "radius": 8000,
-                "keyword": "pool table billiards",
-                "type": "bar|establishment",
+                "rankby": "distance",  # replaces radius
+                "keyword": "bar pool table billiards",
                 "key": GOOGLE_API_KEY,
             },
         )
@@ -71,3 +70,22 @@ async def nearby(body: LatLng):
         )
 
     return {"results": results}
+
+
+@router.get("/autocomplete")
+async def autocomplete(input: str):
+    async with httpx.AsyncClient() as client:
+        res = await client.get(
+            "https://maps.googleapis.com/maps/api/place/autocomplete/json",
+            params={
+                "input": input,
+                "types": "address",
+                "key": GOOGLE_API_KEY,
+            },
+        )
+    data = res.json()
+    predictions = [
+        {"description": p["description"], "place_id": p["place_id"]}
+        for p in data.get("predictions", [])
+    ]
+    return {"predictions": predictions}

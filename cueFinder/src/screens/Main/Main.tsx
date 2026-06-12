@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './Main.css'
 
 export function Main() {
@@ -7,11 +7,34 @@ export function Main() {
   const [address, setAddress] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [predictions, setPredictions] = useState<{ description: string, place_id: string }[]>([])
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    if (!address.trim() || address.length < 3) {
+      setPredictions([])
+      return
+    }
+
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+
+    debounceRef.current = setTimeout(async () => {
+      const res = await fetch(`http://localhost:8000/api/search/autocomplete?input=${encodeURIComponent(address)}`)
+      const data = await res.json()
+      setPredictions(data.predictions)
+    }, 300)
+  }, [address])
+
+  const handleSelect = (description: string) => {
+    setAddress(description)
+    setPredictions([])
+  }
 
   const handleSearch = async () => {
     if (!address.trim()) return
     setLoading(true)
     setError('')
+    setPredictions([])
 
     try {
       const geoRes = await fetch('http://localhost:8000/api/search/geocode', {
@@ -19,7 +42,6 @@ export function Main() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ address })
       })
-
       if (!geoRes.ok) throw new Error('Could not find that address')
       const { lat, lng } = await geoRes.json()
 
@@ -28,10 +50,8 @@ export function Main() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ lat, lng })
       })
-
       if (!nearbyRes.ok) throw new Error('Could not fetch nearby tables')
       const { results } = await nearbyRes.json()
-      console.log('results:', results)
 
       navigate('/results', { state: { results } })
     } catch (err: any) {
@@ -45,19 +65,34 @@ export function Main() {
     <div className="main-page">
       <section className="section1">
         <h1>Find Pool Tables Near You</h1>
-        <div className="search_button">
-          <input
-            type="text"
-            placeholder="Enter your address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-          />
-          <button onClick={handleSearch} disabled={loading}>
-            {loading ? '...' : 'Search'}
-          </button>
+        <div className="search-wrapper">
+          <div className="search_button">
+            <input
+              type="text"
+              placeholder="Enter your address"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+            />
+            <button onClick={handleSearch} disabled={loading}>
+              {loading ? '...' : 'Search'}
+            </button>
+          </div>
+          {predictions.length > 0 && (
+            <ul className="autocomplete-list">
+              {predictions.map((p) => (
+                <li
+                  key={p.place_id}
+                  onClick={() => handleSelect(p.description)}
+                  className="autocomplete-item"
+                >
+                  {p.description}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
-        {error && <p style={{ color: '#f87171', marginTop: '1rem', fontSize: '14px' }}>{error}</p>}
+        {error && <p className="search-error">{error}</p>}
       </section>
 
       <section className="section middle">
