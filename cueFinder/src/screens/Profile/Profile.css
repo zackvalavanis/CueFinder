@@ -1,0 +1,13 @@
+.profile-photo img {
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-photo img:hover {
+  transform: scaleX(1.02);
+}

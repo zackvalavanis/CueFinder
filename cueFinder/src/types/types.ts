@@ -23,3 +23,11 @@ export interface SignupPage {
   email: string
   password: string
 }
+
+export interface ProfileModal {
+  show: boolean
+  onClose: () => void
+  uploadPhoto: (e: React.FormEvent) => void
+  changeFile: (e: React.ChangeEvent<HTMLInputElement>) => void
+  loading: boolean
+}
