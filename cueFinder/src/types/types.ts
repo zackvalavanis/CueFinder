@@ -15,6 +15,7 @@ export interface User {
   token: string | null
   first_name: string
   last_name: string
+  email: string
 }
 
 export interface SignupPage {
@@ -30,4 +31,6 @@ export interface ProfileModal {
   uploadPhoto: (e: React.FormEvent) => void
   changeFile: (e: React.ChangeEvent<HTMLInputElement>) => void
   loading: boolean
+  preview: string | null
+  savedPhotoUrl: string | null
 }

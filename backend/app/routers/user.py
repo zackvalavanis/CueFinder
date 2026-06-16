@@ -1,4 +1,4 @@
-from app.schemas.users import UserResponse, UserCreate
+from app.schemas.users import UserResponse, UserCreate, UserUpdate
 from app.database import get_db
 from sqlalchemy.orm import Session
 from app.models.user import User
@@ -20,6 +20,20 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 def get_users(db: Session = Depends(get_db)):
     users = db.query(User).all()
     return users
+
+
+@router.patch("/users/me", response_model=UserResponse)
+def update_user(
+    updates: UserUpdate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    for field, value in updates.model_dump(exclude_unset=True).items():
+        setattr(current_user, field, value)
+    db.add(current_user)
+    db.commit()
+    db.refresh(current_user)
+    return current_user
 
 
 @router.get("/users/me", response_model=UserResponse)

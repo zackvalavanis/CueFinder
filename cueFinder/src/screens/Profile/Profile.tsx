@@ -12,6 +12,9 @@ export function Profile() {
   const { token } = useAuth()
   const [savedPhotoUrl, setSavedPhotoUrl] = useState<string | null>(null)
   const [isModalShowing, setIsModalShowing] = useState(false)
+  const [preview, setPreview] = useState<string | null>(null)
+  const [formData, setFormData] = useState({ first_name: '', last_name: '', email: '' })
+
 
   useEffect(() => {
     if (!token) return
@@ -21,8 +24,17 @@ export function Profile() {
       .then(res => res.json())
       .then(data => {
         if (data.profile_photo) setSavedPhotoUrl(`http://localhost:8000${data.profile_photo}`)
+        setFormData({ first_name: data.first_name, last_name: data.last_name, email: data.email })
       })
   }, [token])
+
+  useEffect(() => {
+    if (!file) return
+    const url = URL.createObjectURL(file)
+    setTimeout(() => setPreview(url), 0)
+    return () => URL.revokeObjectURL(url)
+  }, [file])
+
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -57,6 +69,7 @@ export function Profile() {
         console.log("upload response: ", data)
         setSavedPhotoUrl(`http://localhost:8000${data.profile_photo_url}?t=${Date.now()}`)
         setFile(null)
+        setPreview(null)
         alert("Upload Completed")
       } else {
         const errData = await res.json();
@@ -73,33 +86,85 @@ export function Profile() {
     setIsModalShowing(true)
   }
 
+  const handleUpdateProfile = async () => {
+    const res = await fetch("http://localhost:8000/users/me", {
+      method: "PATCH",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(formData)
+    })
+    if (res.ok) {
+      alert("Profile updated!")
+    }
+  }
+
+
+
   return (
     <div className='profile-page'>
-      <div className='profile-photo'>
-        <img src={savedPhotoUrl || undefined} onClick={handleModalShow}></img>
-        <ProfileModal
-          show={isModalShowing}
-          onClose={() => setIsModalShowing(false)}
-          uploadPhoto={handleUpload}
-          changeFile={handleFileChange}
-          loading={uploading}
 
-
-        >
-
-        </ProfileModal>
-
-
-
-
-      </div>
-      <div>
-
-
+      {/* Sidebar */}
+      <div className="profile-sidebar">
+        <div className="profile-photo" onClick={handleModalShow}>
+          <img src={savedPhotoUrl || undefined} alt="Profile" />
+          <div className="profile-photo-overlay">
+            <span>Edit</span>
+          </div>
+        </div>
+        <p className="profile-name">{formData.first_name} {formData.last_name}</p>
+        <p className="profile-role">Member since 2024</p>
       </div>
 
+      {/* Main */}
+      <div className="profile-main">
+        <div className="profile-card">
+          <h2>Personal info</h2>
+          <div className="profile-row">
+            <div className="profile-field">
+              <label>First name</label>
+              <input
+                type="text"
+                value={formData.first_name}
+                onChange={(e) => setFormData(prev => ({ ...prev, first_name: e.target.value }))}
+              />
+            </div>
+            <div className="profile-field">
+              <label>Last name</label>
+              <input
+                type="text"
+                value={formData.last_name}
+                onChange={(e) => setFormData(prev => ({ ...prev, last_name: e.target.value }))}
+              />
+            </div>
+          </div>
+          <div className="profile-field" style={{ marginTop: '12px' }}>
+            <label>Email</label>
+            <input
+              type="text"
+              value={formData.email}
+              onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+            />
+          </div>
+          <button onClick={handleUpdateProfile} className="profile-save">Save changes</button>
+        </div>
 
+        <div className="profile-card">
+          <h2>Favorite locations</h2>
+          <p style={{ fontSize: '13px', color: '#888', margin: 0 }}>No saved locations yet.</p>
+        </div>
+      </div>
 
+      <ProfileModal
+        show={isModalShowing}
+        onClose={() => setIsModalShowing(false)}
+        uploadPhoto={handleUpload}
+        changeFile={handleFileChange}
+        loading={uploading}
+        preview={preview}
+        savedPhotoUrl={savedPhotoUrl}
+      />
     </div>
   )
 }

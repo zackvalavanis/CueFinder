@@ -2,13 +2,19 @@ from pydantic import BaseModel, EmailStr, ConfigDict
 from datetime import datetime
 from uuid import UUID
 from app.schemas.p_tables import PTablesResponse
-from typing import List
+from typing import List, Optional
 
 
 class UserBase(BaseModel):
     email: EmailStr
     first_name: str
     last_name: str
+
+
+class UserUpdate(BaseModel):
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    email: Optional[str] = None
 
 
 class UserResponse(UserBase):
