@@ -3,6 +3,7 @@ import { useAuth } from "../Components/useAuth"
 import { useEffect } from "react"
 import './Profile.css'
 import { ProfileModal } from "./ProfileModal"
+import type { MatchesResponse, PTablesResponse } from '../../types/types'
 
 
 
@@ -14,7 +15,31 @@ export function Profile() {
   const [isModalShowing, setIsModalShowing] = useState(false)
   const [preview, setPreview] = useState<string | null>(null)
   const [formData, setFormData] = useState({ first_name: '', last_name: '', email: '' })
+  const [poolTables, setPoolTables] = useState<PTablesResponse[]>([])
+  const [matches, setMatches] = useState<MatchesResponse[]>([])
 
+
+  useEffect(() => {
+    if (!token) return
+    fetch('http://localhost:8000/matches', {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => res.json())
+      .then((data: MatchesResponse[]) => {
+        setMatches(data)
+      })
+  }, [token])
+
+  useEffect(() => {
+    if (!token) return
+    fetch('http://localhost:8000/p_tables', {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => res.json())
+      .then((data: PTablesResponse[]) => {
+        setPoolTables(data)
+      })
+  }, [token])
 
   useEffect(() => {
     if (!token) return
@@ -152,10 +177,35 @@ export function Profile() {
 
         <div className="profile-card">
           <h2>Favorite locations</h2>
-          <p style={{ fontSize: '13px', color: '#888', margin: 0 }}>No saved locations yet.</p>
+          {poolTables.length === 0 ? (
+            <p style={{ fontSize: '13px', color: '#888', margin: 0 }}>No saved locations yet.</p>
+          ) : (
+            poolTables.map((poolTable) => (
+              <div key={String(poolTable.id)}>
+                <h2>{poolTable.location}</h2>
+                {poolTable.rating && <span>⭐ {poolTable.rating}</span>}
+              </div>
+            ))
+          )}
+        </div>
+
+        <div className='profile-card'>
+          {/* Add Matches below and to the backend*/}
+          <h2>Matches</h2>
+          {matches.length === 0 ? (
+            <p style={{ fontSize: '13px', color: '#888', margin: 0 }}>No Matches Yet</p>
+          ) : (
+            matches.map((match) => (
+              <div key={String(match.id)}>
+                <h2>{match.player1_id}</h2>
+                <h2>{match.player2_id}</h2>
+              </div>
+            ))
+          )}
+          {/* Add record Below */}
+          <p style={{ fontSize: '13px', color: '#888', margin: 0 }}>Record: 1 - 2</p>
         </div>
       </div>
-
       <ProfileModal
         show={isModalShowing}
         onClose={() => setIsModalShowing(false)}
@@ -165,6 +215,6 @@ export function Profile() {
         preview={preview}
         savedPhotoUrl={savedPhotoUrl}
       />
-    </div>
+    </div >
   )
 }

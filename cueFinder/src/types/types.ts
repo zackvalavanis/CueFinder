@@ -34,3 +34,32 @@ export interface ProfileModal {
   preview: string | null
   savedPhotoUrl: string | null
 }
+
+export interface PoolTable {
+  id: string
+  name: string
+  address: string
+  place_id: string
+  rating: number | null
+  maps_url: string
+  lat: number
+  lng: number
+}
+
+export interface PTablesResponse {
+  place_id: string
+  id: string
+  rating: number | null
+  table_size: number | null
+  location: string
+  user_id: string
+}
+
+export interface MatchesResponse {
+  id: string
+  player1_id: string
+  player2_id: string
+  winner_id: string
+  location: string
+  played_at: string
+}

@@ -9,8 +9,9 @@ class P_Table(Base):
     __tablename__ = "p_tables"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    rating = Column(Float)
-    table_size = Column(Float)
+    place_id = Column(String, nullable=True)
+    rating = Column(Float, nullable=True)
+    table_size = Column(Float, nullable=True)
     location = Column(String, nullable=False)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
 

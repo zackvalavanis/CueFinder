@@ -33,11 +33,21 @@ def new_p_table(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
+
+    existing = (
+        db.query(P_Table)
+        .filter(P_Table.user_id == user.id, P_Table.place_id == new_p_table.place_id)
+        .first()
+    )
+    if existing:
+        raise HTTPException(status_code=409, detail="Table already saved")
+
     new_p_table = P_Table(
         rating=new_p_table.rating,
         location=new_p_table.location,
         table_size=new_p_table.table_size,
         user_id=user.id,
+        place_id=new_p_table.place_id,
     )
     db.add(new_p_table)
     db.commit()

@@ -6,8 +6,9 @@ from pydantic import ConfigDict
 
 class PTablesResponse(BaseModel):
     id: UUID
-    rating: float
-    table_size: float
+    place_id: str
+    rating: float | None = None
+    table_size: float | None = None
     location: str
     user_id: uuid.UUID
 
@@ -15,6 +16,7 @@ class PTablesResponse(BaseModel):
 
 
 class PTablesCreate(BaseModel):
-    rating: float
-    table_size: float
+    rating: float | None = None
+    table_size: float | None = None
     location: str
+    place_id: str
