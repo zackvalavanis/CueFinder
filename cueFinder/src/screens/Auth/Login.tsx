@@ -59,47 +59,55 @@ export function Login() {
 
   return (
     <div className='login-page'>
-      <h1>Login to Save Your Favorite Tables</h1>
-      <div className='login-form'>
-        <form onSubmit={(e) => {
-          e.preventDefault()
-          handleLogin(formData)
-        }}>
+      <div className="left-side-login">
+        <h1>Login to Save Your Favorite Tables</h1>
+      </div>
 
-          <input
-            className="email-input"
-            name='email'
-            type="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}>
-          </input>
-          <div className="input-wrapper">
+
+
+      <div className="right-side-login">
+
+        <div className='login-form'>
+          <form onSubmit={(e) => {
+            e.preventDefault()
+            handleLogin(formData)
+          }}>
+
             <input
-              name='password'
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Password"
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}>
+              className="email-input"
+              name='email'
+              type="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}>
             </input>
-            <button type='button' className='eye-toggle' onClick={() => setShowPassword(!showPassword)}>{showPassword ? <EyeOff size={16} /> : <Eye size={16} />}</button>
-          </div>
-          <div className='login-buttons-container'>
-            <button type='submit' className="login-btn">Login</button>
-            <span className="auth-divider">or</span>
-            <button className="apple-btn">
-              🍎 Sign in with Apple
-            </button>
-            <GoogleLogin
-              onSuccess={() => window.location.href = 'http://localhost:8000/auth/google'}
-              onError={() => console.log('Login failed')}
-              size="large"
-              shape="rectangular"
-              text="signin_with"
-              width="375"
-            />
-          </div>
-        </form>
+            <div className="input-wrapper">
+              <input
+                name='password'
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Password"
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}>
+              </input>
+              <button type='button' className='eye-toggle' onClick={() => setShowPassword(!showPassword)}>{showPassword ? <EyeOff size={16} /> : <Eye size={16} />}</button>
+            </div>
+            <div className='login-buttons-container'>
+              <button type='submit' className="login-btn">Login</button>
+              <span className="auth-divider">or</span>
+              <button className="apple-btn">
+                🍎 Sign in with Apple
+              </button>
+              <GoogleLogin
+                onSuccess={() => window.location.href = 'http://localhost:8000/auth/google'}
+                onError={() => console.log('Login failed')}
+                size="large"
+                shape="rectangular"
+                text="signin_with"
+                width="335"
+              />
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   )

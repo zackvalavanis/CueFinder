@@ -1,3 +1,7 @@
+.headernav {
+  background-color: black;
+}
+
 .nav-bar-container {
   display: flex;
   justify-content: flex-end;
@@ -5,6 +9,21 @@
   width: 90%;
   height: 70px;
   margin: 0 auto;
+}
+
+.nav-bar-right a {
+  text-decoration: none;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  transition: color 0.15s;
+  display: flex;
+  align-items: center;
+}
+
+.nav-bar-right a:hover {
+  color: #4ade80;
 }
 
 .nav-bar-right {
@@ -17,7 +36,6 @@
 .nav-bar-right a {
   text-decoration: none;
   font-family: 'Inter', 'Segoe UI', sans-serif;
-  color: #111;
   font-size: 15px;
   font-weight: 500;
   transition: color 0.15s;

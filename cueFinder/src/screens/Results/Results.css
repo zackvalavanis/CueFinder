@@ -1,9 +1,3 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 .results-page {
   display: flex;
   flex-direction: column;
@@ -11,6 +5,8 @@
   min-height: 100vh;
   padding: 3rem 2rem 6rem;
   font-family: 'Inter', 'Segoe UI', sans-serif;
+  color: white;
+  background: #0f0f0f;
 }
 
 /* ── Header ── */
@@ -21,13 +17,12 @@
   width: 100%;
   max-width: 780px;
   margin-bottom: 2.5rem;
-  color: black;
 }
 
 .back-btn {
-  background: rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.18);
-  color: rgb(0, 0, 0);
+  color: white;
   padding: 0.5rem 1.1rem;
   border-radius: 8px;
   cursor: pointer;
@@ -42,7 +37,6 @@
 .back-btn:hover {
   background: rgba(255, 255, 255, 0.14);
   border-color: rgba(255, 255, 255, 0.35);
-  color: black;
 }
 
 .results-page h1 {
@@ -50,12 +44,12 @@
   font-weight: 800;
   letter-spacing: -2px;
   line-height: 1.1;
-  color: rgb(0, 0, 0);
+  color: white;
 }
 
 .results-count {
   font-size: 14px;
-  color: rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.5);
   margin-top: 0.5rem;
   letter-spacing: 0.2px;
 }
@@ -67,30 +61,6 @@
   gap: 1rem;
   width: 100%;
   max-width: 780px;
-}
-
-.buttons-right-side {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  text-decoration: none;
-  gap: 5px;
-}
-
-
-.buttons-right-side a {
-  text-decoration: none;
-  color: white;
-  border-radius: 20px;
-  padding: 11px;
-  background-color: rgb(18, 79, 3);
-}
-
-.buttons-right-side a:hover {
-  transform: scale(1.02);
-  background-color: rgb(22, 196, 22);
-  color: white;
 }
 
 /* ── Card ── */
@@ -161,10 +131,11 @@
   border-radius: 20px;
 }
 
-/* ── Button ── */
+/* ── Directions button ── */
 .maps-btn {
   height: 42px;
   padding: 0 1.4rem;
+  margin-bottom: 20px;
   background: #16a34a;
   color: white;
   border-radius: 10px;
@@ -185,6 +156,38 @@
   transform: translateY(-1px);
 }
 
+/* ── Like button ── */
+.like-button {
+  cursor: pointer;
+  border-radius: 10px;
+  width: 150px;
+  height: 42px;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  background: rgba(22, 163, 74, 0.15);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  flex-shrink: 0;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.like-button:hover {
+  background: #16a34a;
+  transform: translateY(-1px);
+}
+
+.like-button:disabled {
+  background: rgba(22, 163, 74, 0.4);
+  border-color: rgba(74, 222, 128, 0.5);
+  color: white;
+  cursor: default;
+}
+
+.like-button:disabled:hover {
+  transform: none;
+}
+
 /* ── Empty state ── */
 .no-results {
   color: rgba(255, 255, 255, 0.4);
@@ -193,28 +196,93 @@
   text-align: center;
 }
 
-.like-button {
+/* ── Pagination ── */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+}
+
+.pagination button {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: white;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
   cursor: pointer;
-  border-radius: 20px;
-  width: 120px;
-  height: 40px;
-  border: none;
-  background-color: rgb(18, 79, 3);
+  font-size: 13px;
+  font-family: inherit;
+  transition: background 0.2s;
 }
 
-.like-button:hover {
-  transform: scale(1.02);
-  background-color: rgb(22, 196, 22);
-  color: white;
+.pagination button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.35);
 }
 
-.like-button:disabled {
-  background-color: rgb(22, 196, 22);
-  color: white;
+.pagination button:disabled {
+  opacity: 0.3;
   cursor: default;
 }
 
-.like-button:disabled:hover {
-  transform: none;
-  background-color: rgb(22, 196, 22);
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .results-page {
+    padding: 1.5rem 1rem 4rem;
+  }
+
+  .results-page h1 {
+    font-size: 28px;
+    letter-spacing: -1px;
+  }
+
+  .result-card {
+    flex-wrap: wrap;
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+
+  .result-index {
+    display: none;
+  }
+
+  .result-info {
+    width: 100%;
+  }
+
+  .result-info h2 {
+    font-size: 15px;
+  }
+
+  .result-info p {
+    font-size: 13px;
+  }
+
+  .maps-btn,
+  .like-button {
+    flex: 1;
+    margin-bottom: 15px;
+    height: 40px;
+    justify-content: center;
+    font-size: 13px;
+  }
+
+  .like-button {
+    width: 150px;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    font-size: 13px;
+  }
+
+  .pagination button {
+    padding: 0.4rem 0.8rem;
+  }
 }

@@ -12,7 +12,8 @@ export function Results() {
   const results: PoolTable[] = location.state?.results ?? []
   console.log(results)
   const [likedIds, setLikedIds] = useState<Set<string>>(new Set<string>())
-
+  const [page, setPage] = useState(1)
+  const ITEMS_PER_PAGE = 5
 
   useEffect(() => {
     if (!token) return
@@ -51,6 +52,11 @@ export function Results() {
 
   }
 
+
+  const paginatedResults = results.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE)
+  const totalPages = Math.ceil(results.length / ITEMS_PER_PAGE)
+
+
   return (
     <div className="results-page">
       <div className="results-header">
@@ -61,11 +67,11 @@ export function Results() {
         <p className="results-count">{results.length} locations found</p>
       </div>
 
-      {results.length === 0 ? (
+      {paginatedResults.length === 0 ? (
         <p className="no-results">No pool tables found near that address.</p>
       ) : (
         <div className="results-list">
-          {results.map((table, i) => (
+          {paginatedResults.map((table, i) => (
             <div key={table.place_id} className="result-card">
               <span className="result-index">{i + 1}</span>
               <div className="result-info">
@@ -81,6 +87,7 @@ export function Results() {
 
               <div className='buttons-right-side'>
                 <a
+                  className='maps-btn'
                   href={table.maps_url}
                 >
                   Get Directions
@@ -95,6 +102,17 @@ export function Results() {
               </div>
             </div>
           ))}
+          {totalPages > 1 && (
+            <div className="pagination">
+              <button onClick={() => setPage(p => p - 1)} disabled={page === 1}>
+                ← Prev
+              </button>
+              <span>{page} / {totalPages}</span>
+              <button onClick={() => setPage(p => p + 1)} disabled={page === totalPages}>
+                Next →
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

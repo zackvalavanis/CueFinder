@@ -57,7 +57,7 @@ async def nearby(body: LatLng):
         raise HTTPException(status_code=400, detail="Places search failed")
 
     results = []
-    for place in data.get("results", []):
+    for place in data.get("results", [])[:20]:
         place_id = place.get("place_id")
         results.append(
             {
