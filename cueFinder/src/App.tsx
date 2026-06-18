@@ -10,6 +10,7 @@ import { ToastContainer } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
 import { Profile } from "./screens/Profile/Profile"
 import { Results } from "./screens/Results/Results"
+import { AuthCallback } from "./screens/Auth/AuthCallback"
 
 function App() {
 
@@ -27,7 +28,8 @@ function App() {
         { path: '/login', element: <Login /> },
         { path: '/sign-up', element: <SignUp /> },
         { path: '/profile', element: <Profile /> },
-        { path: '/results', element: <Results /> }
+        { path: '/results', element: <Results /> },
+        { path: '/auth/callback', element: <AuthCallback /> }
       ]
     }
   ])

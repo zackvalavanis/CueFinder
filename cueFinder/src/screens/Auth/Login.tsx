@@ -85,8 +85,9 @@ export function Login() {
           </div>
           <button type='submit'>Login</button>
           <button>Log in with Apple</button>
-          <button>Log in with Google</button>
-
+          <button onClick={() => window.location.href = 'http://localhost:8000/auth/google'}>
+            Sign in with Google
+          </button>
         </form>
       </div>
     </div>
