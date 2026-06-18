@@ -11,6 +11,12 @@ from uuid import UUID
 router = APIRouter()
 
 
+@router.get("/matches", response_model=List[MatchesResponse])
+def get_all_matches(db: Session = Depends(get_db)):
+    matches = db.query(Match).all()
+    return matches
+
+
 @router.get("/matches/me", response_model=List[MatchesResponse])
 def get_matches(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     matches = (

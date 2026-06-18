@@ -67,12 +67,19 @@ export function Main() {
   }
 
 
-  // const HandleFlipLeaderboards = async () => {
-  //   console.log('flipping')
-  //   try {
-  //     const res = fetch('http://localhost:8000/matches')
-  //   }
-  // }
+  const HandleFlipLeaderboards = async () => {
+    console.log('flipping')
+    try {
+      const res = await fetch('http://localhost:8000/matches', {
+        method: 'GET'
+      })
+
+      const data = await res.json()
+      console.log(data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   return (
     <div className="main-page">
@@ -129,7 +136,7 @@ export function Main() {
 
       <section className="section">
         <div className='leaderBoards'>
-          <h1 >Leaderboards</h1>
+          <h1 onClick={HandleFlipLeaderboards} >Leaderboards</h1>
         </div>
       </section>
     </div>
