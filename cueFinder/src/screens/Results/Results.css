@@ -25,7 +25,7 @@
 }
 
 .back-btn {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.18);
   color: rgb(0, 0, 0);
   padding: 0.5rem 1.1rem;
@@ -69,13 +69,37 @@
   max-width: 780px;
 }
 
+.buttons-right-side {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-decoration: none;
+  gap: 5px;
+}
+
+
+.buttons-right-side a {
+  text-decoration: none;
+  color: white;
+  border-radius: 20px;
+  padding: 11px;
+  background-color: rgb(18, 79, 3);
+}
+
+.buttons-right-side a:hover {
+  transform: scale(1.02);
+  background-color: rgb(22, 196, 22);
+  color: white;
+}
+
 /* ── Card ── */
 .result-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
-  background: rgba(10, 10, 10, 0.75);
+  background: rgba(0, 0, 0, 0.75);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 16px;
   padding: 1.5rem 2rem;
@@ -167,4 +191,30 @@
   font-size: 16px;
   margin-top: 6rem;
   text-align: center;
+}
+
+.like-button {
+  cursor: pointer;
+  border-radius: 20px;
+  width: 120px;
+  height: 40px;
+  border: none;
+  background-color: rgb(18, 79, 3);
+}
+
+.like-button:hover {
+  transform: scale(1.02);
+  background-color: rgb(22, 196, 22);
+  color: white;
+}
+
+.like-button:disabled {
+  background-color: rgb(22, 196, 22);
+  color: white;
+  cursor: default;
+}
+
+.like-button:disabled:hover {
+  transform: none;
+  background-color: rgb(22, 196, 22);
 }

@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 
 
 export function Results() {
-  const { token } = useAuth()
+  const { token, user } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
   const results: PoolTable[] = location.state?.results ?? []
@@ -78,13 +78,21 @@ export function Results() {
                   </div>
                 )}
               </div>
-              <a href={table.maps_url}>
-                Get Directions
-              </a>
-              <button
-                onClick={() => LikeTable(table)}
-                disabled={likedIds.has(table.place_id)}
-              >{likedIds.has(table.place_id) ? 'Saved' : 'Like'}</button>
+
+              <div className='buttons-right-side'>
+                <a
+                  href={table.maps_url}
+                >
+                  Get Directions
+                </a>
+                {user && (
+                  <button
+                    className="like-button"
+                    onClick={() => LikeTable(table)}
+                    disabled={likedIds.has(table.place_id)}
+                  >{likedIds.has(table.place_id) ? 'Saved' : 'Like'}</button>
+                )}
+              </div>
             </div>
           ))}
         </div>
