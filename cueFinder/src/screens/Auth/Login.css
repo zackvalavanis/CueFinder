@@ -1,23 +1,33 @@
 .login-page {
   height: 100vh;
-  /* was 90vh */
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  gap: 40px;
+  gap: 24px;
+  background: #f7f7f5;
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
-  height: 400px;
-  width: 550px;
+  width: 440px;
   align-items: center;
   justify-content: center;
-  background-color: rgb(142, 141, 141);
-  border-radius: 20px;
+  background: #fff;
+  border-radius: 16px;
+  border: 0.5px solid rgba(0, 0, 0, 0.1);
+  padding: 2.5rem 2rem;
+  gap: 0;
+}
+
+.login-form h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 1.5rem;
+  color: #111;
+  text-align: center;
 }
 
 .login-form form {
@@ -28,33 +38,58 @@
 }
 
 .email-input {
-  width: 80%;
-  padding: 8px 12px;
-  border-radius: 6px;
-  margin: 0 auto 20px auto;
-  /* top right bottom left */
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 0.5px solid rgba(0, 0, 0, 0.15);
+  background: #f7f7f5;
+  font-size: 14px;
+  margin: 0 0 12px 0;
+  box-sizing: border-box;
+  outline: none;
 }
 
+.email-input:focus {
+  border-color: #16a34a;
+}
 
 .login-form button:not(.eye-toggle) {
-  width: 80%;
-  padding: 8px 12px;
+  width: 100%;
+  padding: 10px 12px;
   cursor: pointer;
-  border-radius: 20px;
-  margin: 20px auto 0 auto;
+  border-radius: 8px;
+  border: none;
+  background: #111;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 16px 0 0 0;
+  transition: background 0.2s;
+}
+
+.login-form button:not(.eye-toggle):hover {
+  background: #333;
 }
 
 .input-wrapper {
   position: relative;
-  width: 80%;
-  margin: 0 auto 20px auto;
+  width: 100%;
+  margin: 0 0 12px 0;
 }
 
 .input-wrapper input {
   width: 100%;
-  padding: 8px 40px 8px 12px;
-  /* right padding leaves room for the icon */
-  border-radius: 6px;
+  padding: 10px 40px 10px 12px;
+  border-radius: 8px;
+  border: 0.5px solid rgba(0, 0, 0, 0.15);
+  background: #f7f7f5;
+  font-size: 14px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.input-wrapper input:focus {
+  border-color: #16a34a;
 }
 
 .eye-toggle {
@@ -68,4 +103,18 @@
   padding: 0;
   display: flex;
   align-items: center;
+  color: #888;
+}
+
+@media (max-width: 768px) {
+  .login-page {
+    padding: 1.5rem;
+    gap: 16px;
+  }
+
+  .login-form {
+    width: 100%;
+    padding: 2rem 1.5rem;
+    border-radius: 12px;
+  }
 }

@@ -203,3 +203,68 @@
   margin-top: 1rem;
   font-size: 14px;
 }
+
+@media (max-width: 768px) {
+  .section1 {
+    height: auto;
+    min-height: 100vh;
+    padding: 6rem 1.5rem;
+    gap: 2.5rem;
+  }
+
+  .section1 h1 {
+    font-size: 36px;
+    letter-spacing: -1px;
+    max-width: 100%;
+  }
+
+  .search-wrapper {
+    width: 100%;
+  }
+
+  .search_button {
+    width: 100%;
+  }
+
+  .main-page input {
+    width: 100%;
+    flex: 1;
+  }
+
+  .search_button button {
+    width: 90px;
+    font-size: 14px;
+  }
+
+  .middle {
+    padding: 5rem 1.5rem;
+    gap: 2rem;
+  }
+
+  .middle-title {
+    font-size: 28px;
+  }
+
+  .middle-middle {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+  }
+
+  .middle-boxes {
+    min-height: 200px;
+    padding: 2rem 1.5rem;
+  }
+
+  .middle-boxes h1 {
+    font-size: 14px;
+  }
+
+  .section {
+    padding: 3rem 1.5rem;
+    min-height: auto;
+  }
+
+  .autocomplete-list {
+    width: 100%;
+  }
+}

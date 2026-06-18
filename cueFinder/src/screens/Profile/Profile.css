@@ -124,3 +124,42 @@
   font-weight: 500;
   margin: 0 0 1rem;
 }
+
+@media (max-width: 768px) {
+  .profile-page {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .profile-sidebar {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #fff;
+    border: 0.5px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+  }
+
+  .profile-photo {
+    flex-shrink: 0;
+  }
+
+  .profile-name {
+    text-align: left;
+  }
+
+  .profile-role {
+    text-align: left;
+  }
+
+  .profile-row {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-card {
+    padding: 1rem;
+  }
+}

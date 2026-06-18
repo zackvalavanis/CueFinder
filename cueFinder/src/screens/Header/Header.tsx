@@ -4,7 +4,6 @@ import { useAuth } from "../Components/useAuth"
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import HomeIcon from '@mui/icons-material/Home';
 import LogoutIcon from '@mui/icons-material/Logout';
-import LoginIcon from '@mui/icons-material/Login';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 
 

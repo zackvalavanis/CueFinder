@@ -5,19 +5,28 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  gap: 40px;
+  gap: 24px;
+  background: #f7f7f5;
 }
 
 .signup-form {
   display: flex;
   flex-direction: column;
-  width: 550px;
-  padding: 40px;
-  /* use padding instead of fixed height */
+  width: 440px;
   align-items: center;
   justify-content: center;
-  background-color: rgb(142, 141, 141);
-  border-radius: 20px;
+  background: #fff;
+  border-radius: 16px;
+  border: 0.5px solid rgba(0, 0, 0, 0.1);
+  padding: 2.5rem 2rem;
+}
+
+.signup-form h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 1.5rem;
+  color: #111;
+  text-align: center;
 }
 
 .signup-form form {
@@ -30,36 +39,62 @@
 .signup-inputs {
   display: flex;
   flex-direction: column;
-  width: 80%;
+  width: 100%;
 }
 
 .signup-inputs input {
   height: 40px;
-  border-radius: 5px;
-  margin-bottom: 20px;
+  border-radius: 8px;
+  margin-bottom: 12px;
   padding: 0 12px;
   box-sizing: border-box;
+  border: 0.5px solid rgba(0, 0, 0, 0.15);
+  background: #f7f7f5;
+  font-size: 14px;
+  outline: none;
+}
+
+.signup-inputs input:focus {
+  border-color: #16a34a;
 }
 
 .signup-form button:not(.eye-toggle) {
-  width: 80%;
-  padding: 8px 12px;
+  width: 100%;
+  padding: 10px 12px;
   cursor: pointer;
-  border-radius: 20px;
-  margin: 8px auto 0 auto;
+  border-radius: 8px;
+  border: none;
+  background: #111;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 16px 0 0 0;
+  transition: background 0.2s;
+}
+
+.signup-form button:not(.eye-toggle):hover {
+  background: #333;
 }
 
 .input-wrapper {
   position: relative;
-  width: 80%;
-  margin: 0 auto 20px auto;
+  width: 100%;
+  margin: 0 0 12px 0;
 }
 
 .input-wrapper input {
   width: 100%;
-  padding: 8px 40px 8px 12px;
-  border-radius: 6px;
+  padding: 10px 40px 10px 12px;
+  border-radius: 8px;
+  border: 0.5px solid rgba(0, 0, 0, 0.15);
+  background: #f7f7f5;
+  font-size: 14px;
   box-sizing: border-box;
+  outline: none;
+}
+
+.input-wrapper input:focus {
+  border-color: #16a34a;
 }
 
 .eye-toggle {
@@ -73,4 +108,18 @@
   padding: 0;
   display: flex;
   align-items: center;
+  color: #888;
+}
+
+@media (max-width: 768px) {
+  .signup-page {
+    padding: 1.5rem;
+    gap: 16px;
+  }
+
+  .signup-form {
+    width: 100%;
+    padding: 2rem 1.5rem;
+    border-radius: 12px;
+  }
 }
