@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import { toast } from "react-toastify"
 import './Login.css'
 import { Eye, EyeOff } from 'lucide-react'
+import { GoogleLogin } from '@react-oauth/google'
 
 export function Login() {
   const { login } = useAuth();
@@ -83,11 +84,21 @@ export function Login() {
             </input>
             <button type='button' className='eye-toggle' onClick={() => setShowPassword(!showPassword)}>{showPassword ? <EyeOff size={16} /> : <Eye size={16} />}</button>
           </div>
-          <button type='submit'>Login</button>
-          <button>Log in with Apple</button>
-          <button onClick={() => window.location.href = 'http://localhost:8000/auth/google'}>
-            Sign in with Google
-          </button>
+          <div className='login-buttons-container'>
+            <button type='submit' className="login-btn">Login</button>
+            <span className="auth-divider">or</span>
+            <button className="apple-btn">
+              🍎 Sign in with Apple
+            </button>
+            <GoogleLogin
+              onSuccess={() => window.location.href = 'http://localhost:8000/auth/google'}
+              onError={() => console.log('Login failed')}
+              size="large"
+              shape="rectangular"
+              text="signin_with"
+              width="375"
+            />
+          </div>
         </form>
       </div>
     </div>
