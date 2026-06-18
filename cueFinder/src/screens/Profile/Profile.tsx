@@ -21,7 +21,7 @@ export function Profile() {
 
   useEffect(() => {
     if (!token) return
-    fetch('http://localhost:8000/matches', {
+    fetch('http://localhost:8000/matches/me', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())

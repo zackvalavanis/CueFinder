@@ -97,14 +97,13 @@ export function Login() {
               <button className="apple-btn">
                 🍎 Sign in with Apple
               </button>
-              <GoogleLogin
-                onSuccess={() => window.location.href = 'http://localhost:8000/auth/google'}
-                onError={() => console.log('Login failed')}
-                size="large"
-                shape="rectangular"
-                text="signin_with"
-                width="335"
-              />
+              <button
+                className="google-btn"
+                onClick={() => window.location.href = 'http://localhost:8000/auth/google'}
+              >
+                <img src="https://www.google.com/favicon.ico" width="16" height="16" />
+                Sign in with Google
+              </button>
             </div>
           </form>
         </div>

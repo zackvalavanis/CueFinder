@@ -204,6 +204,16 @@
   font-size: 14px;
 }
 
+.leaderBoards {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.leaderBoards h1 {
+  color: black;
+}
+
 @media (max-width: 768px) {
   .section1 {
     height: auto;

@@ -11,18 +11,22 @@ export function Main() {
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
-    if (!address.trim() || address.length < 3) {
-      setPredictions([])
-      return
-    }
-
     if (debounceRef.current) clearTimeout(debounceRef.current)
+
+    if (!address.trim() || address.length < 3) return
 
     debounceRef.current = setTimeout(async () => {
       const res = await fetch(`http://localhost:8000/api/search/autocomplete?input=${encodeURIComponent(address)}`)
       const data = await res.json()
       setPredictions(data.predictions)
     }, 300)
+
+    return () => {
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current)
+        debounceRef.current = null
+      }
+    }
   }, [address])
 
   const handleSelect = (description: string) => {
@@ -54,12 +58,21 @@ export function Main() {
       const { results } = await nearbyRes.json()
 
       navigate('/results', { state: { results } })
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message)
     } finally {
       setLoading(false)
     }
   }
+
+
+  // const HandleFlipLeaderboards = async () => {
+  //   console.log('flipping')
+  //   try {
+  //     const res = fetch('http://localhost:8000/matches')
+  //   }
+  // }
 
   return (
     <div className="main-page">
@@ -115,7 +128,9 @@ export function Main() {
       </section>
 
       <section className="section">
-        <h1>Bottom Section</h1>
+        <div className='leaderBoards'>
+          <h1 >Leaderboards</h1>
+        </div>
       </section>
     </div>
   )
