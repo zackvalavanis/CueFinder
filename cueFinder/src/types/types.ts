@@ -12,10 +12,17 @@ export interface AuthContextType {
 }
 
 export interface User {
+  id: string
   token: string | null
   first_name: string
   last_name: string
   email: string
+}
+
+export interface PublicUser {
+  id: string
+  first_name: string
+  last_name: string
 }
 
 export interface SignupPage {
@@ -57,9 +64,14 @@ export interface PTablesResponse {
 
 export interface MatchesResponse {
   id: string
-  player1_id: string
-  player2_id: string
   winner_id: string
-  location: string
   played_at: string
+  player1: { id: string; first_name: string; last_name: string }
+  player2: { id: string; first_name: string; last_name: string }
+}
+
+export interface Game {
+  id: number
+  opponent_id: string | null
+  winner: string | null
 }

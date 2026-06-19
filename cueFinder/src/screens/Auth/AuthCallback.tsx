@@ -15,7 +15,7 @@ export function AuthCallback() {
       login(token)
       navigate('/')
     } else {
-      navigate('/login')
+      navigate('/')
     }
   }, [])
 

@@ -1,3 +1,4 @@
+from datetime import datetime
 from app.schemas.matches import MatchesCreate, MatchesResponse
 from app.database import get_db
 from app.utils.auth import get_current_user
@@ -7,21 +8,32 @@ from app.models.match import Match
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from uuid import UUID
+from sqlalchemy.orm import joinedload
 
 router = APIRouter()
 
 
 @router.get("/matches", response_model=List[MatchesResponse])
 def get_all_matches(db: Session = Depends(get_db)):
-    matches = db.query(Match).all()
+    matches = (
+        db.query(Match)
+        .options(joinedload(Match.player1), joinedload(Match.player2))
+        .all()
+    )
     return matches
 
 
-@router.get("/matches/me", response_model=List[MatchesResponse])
-def get_matches(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+@router.get("/matches/me", response_model=list[MatchesResponse])
+def get_my_matches(
+    db: Session = Depends(get_db), current_user=Depends(get_current_user)
+):
     matches = (
         db.query(Match)
-        .filter((Match.player1_id == user.id) | (Match.player2_id == user.id))
+        .options(joinedload(Match.player1), joinedload(Match.player2))
+        .filter(
+            (Match.player1_id == current_user.id)
+            | (Match.player2_id == current_user.id)
+        )
         .all()
     )
     return matches
@@ -91,3 +103,17 @@ def get_record(user: User = Depends(get_current_user), db: Session = Depends(get
         .count()
     )
     return {"wins": wins, "losses": losses}
+
+
+@router.post("/matches/session")
+def create_session(matches: list[MatchesCreate], db: Session = Depends(get_db)):
+    for m in matches:
+        match = Match(
+            player1_id=m.player1_id,
+            player2_id=m.player2_id,
+            winner_id=m.winner_id,
+            played_at=datetime.utcnow(),
+        )
+        db.add(match)
+    db.commit()
+    return {"Saved:", len(matches)}

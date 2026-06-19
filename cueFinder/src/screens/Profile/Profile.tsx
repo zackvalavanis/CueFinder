@@ -26,6 +26,7 @@ export function Profile() {
     })
       .then(res => res.json())
       .then((data: MatchesResponse[]) => {
+        console.log(data[0])
         setMatches(data)
       })
   }, [token])
@@ -125,8 +126,6 @@ export function Profile() {
     }
   }
 
-
-
   return (
     <div className='profile-page'>
 
@@ -197,8 +196,12 @@ export function Profile() {
           ) : (
             matches.map((match) => (
               <div key={String(match.id)}>
-                <h2>{match.player1_id}</h2>
-                <h2>{match.player2_id}</h2>
+                <div className='ind-matches'>
+                  <h2>{match.player1?.first_name}</h2>
+                  <h2>vs.</h2>
+                  <h2>{match.player2?.first_name}</h2>
+                  <h2>{match.player1?.id === match.winner_id ? match.player1?.first_name : match.player2?.first_name} won</h2>
+                </div>
               </div>
             ))
           )}

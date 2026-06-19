@@ -214,6 +214,24 @@
   color: black;
 }
 
+.match-button {
+  cursor: pointer;
+  width: 500px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  border: none;
+  background: #16a34a;
+}
+
+.match-button:hover {
+  background-color: black;
+  color: white;
+}
+
 @media (max-width: 768px) {
   .section1 {
     height: auto;
@@ -228,6 +246,7 @@
     max-width: 100%;
   }
 
+  /* Fix: was 490px fixed */
   .search-wrapper {
     width: 100%;
   }
@@ -236,13 +255,18 @@
     width: 100%;
   }
 
+  /* Fix: was 380px fixed */
   .main-page input {
-    width: 100%;
+    width: 0;
+    /* let flex do the work */
     flex: 1;
+    min-width: 0;
+    /* prevents flex blowout */
   }
 
   .search_button button {
     width: 90px;
+    flex-shrink: 0;
     font-size: 14px;
   }
 
@@ -276,5 +300,12 @@
 
   .autocomplete-list {
     width: 100%;
+  }
+
+  /* Fix: was 500px × 300px fixed — will overflow on mobile */
+  .match-button {
+    width: 300px;
+    height: 200px;
+    border-radius: 14px;
   }
 }

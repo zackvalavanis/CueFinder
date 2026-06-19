@@ -12,6 +12,7 @@ import { Profile } from "./screens/Profile/Profile"
 import { Results } from "./screens/Results/Results"
 import { AuthCallback } from "./screens/Auth/AuthCallback"
 import { GoogleOAuthProvider } from "@react-oauth/google"
+import { MatchPlay } from "./screens/MatchPlay/MatchPlay"
 
 
 function App() {
@@ -31,7 +32,8 @@ function App() {
         { path: '/sign-up', element: <SignUp /> },
         { path: '/profile', element: <Profile /> },
         { path: '/results', element: <Results /> },
-        { path: '/auth/callback', element: <AuthCallback /> }
+        { path: '/auth/callback', element: <AuthCallback /> },
+        { path: '/match-play', element: <MatchPlay /> }
       ]
     }
   ])

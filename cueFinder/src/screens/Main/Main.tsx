@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router'
 import { useState, useEffect, useRef } from 'react'
 import './Main.css'
+import { useAuth } from '../Components/useAuth'
 
 export function Main() {
   const navigate = useNavigate()
@@ -9,6 +10,7 @@ export function Main() {
   const [error, setError] = useState('')
   const [predictions, setPredictions] = useState<{ description: string, place_id: string }[]>([])
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const { user } = useAuth()
 
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current)
@@ -131,6 +133,11 @@ export function Main() {
             <span className="icon">📊</span>
             <h1>Track games and history against your competition.</h1>
           </div>
+        </div>
+        <div>
+          {user && (
+            <button className='match-button' onClick={() => navigate('/Match-play')}>Match Play</button>
+          )}
         </div>
       </section>
 

@@ -125,6 +125,11 @@
   margin: 0 0 1rem;
 }
 
+.ind-matches {
+  display: flex;
+  gap: 20px;
+}
+
 @media (max-width: 768px) {
   .profile-page {
     flex-direction: column;
