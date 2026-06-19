@@ -64,13 +64,16 @@ export interface PTablesResponse {
 
 export interface MatchesResponse {
   id: string
+  session_id: string
   winner_id: string
   played_at: string
   player1: { id: string; first_name: string; last_name: string }
   player2: { id: string; first_name: string; last_name: string }
 }
 
+
 export interface Game {
+  session_id: string | null
   id: number
   opponent_id: string | null
   winner: string | null
@@ -82,4 +85,10 @@ export interface Leaderboard {
   last_name: string
   wins: number
   losses: number
+}
+
+export interface MatchesModalProps {
+  show: boolean
+  onClose: () => void
+  matches: MatchesResponse[] | null
 }

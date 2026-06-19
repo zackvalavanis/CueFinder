@@ -128,7 +128,7 @@ export function Main() {
         {error && <p className="search-error">{error}</p>}
       </section>
 
-      <section className="section middle">
+      <section id='match' className="section middle">
         <p className="middle-heading">Why CueFinder</p>
         <h2 className="middle-title">Everything you need at the table.</h2>
         <div className="middle-middle">
@@ -153,10 +153,10 @@ export function Main() {
       </section>
 
       <section className="section">
-        <div className='leaderBoards'>
+        <div id='leaderboard' className='leaderBoards'>
           <h1 onClick={HandleFlipLeaderboards}>Leaderboards</h1>
           <table>
-            <thead>
+            <thead className='headers'>
               <tr>
                 <th>#</th>
                 <th>Name</th>

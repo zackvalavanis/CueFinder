@@ -155,6 +155,30 @@
 }
 
 /* Force Google button full width */
+
+
+.google-btn {
+  width: 100%;
+  padding: 10px 12px;
+  cursor: pointer;
+  border-radius: 8px;
+  border: none;
+  background: rgb(224, 224, 224);
+  color: black;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.google-btn:hover {
+  background: #f7f6f6;
+}
+
 .login-buttons-container>div {
   width: 100% !important;
 }

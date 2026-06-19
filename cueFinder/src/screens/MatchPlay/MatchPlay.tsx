@@ -8,10 +8,10 @@ export function MatchPlay() {
   const [players, setPlayers] = useState<PublicUser[]>([])
   const [loading, setLoading] = useState(false)
   const { user, token } = useAuth()
-  const [games, setGames] = useState<Game[]>([{ id: 1, opponent_id: null, winner: null }])
+  const [games, setGames] = useState<Game[]>([{ id: 1, opponent_id: null, winner: null, session_id: null }])
 
   const addGame = () => {
-    setGames(prev => [...prev, { id: prev.length + 1, opponent_id: null, winner: null }])
+    setGames(prev => [...prev, { id: prev.length + 1, opponent_id: null, winner: null, session_id: null }])
   }
 
   const updateGame = (id: number, field: keyof Game, value: string) => {
@@ -22,10 +22,12 @@ export function MatchPlay() {
 
   const saveSession = async () => {
     if (!user) return
+    const session_id = crypto.randomUUID()
 
     const payload = games
       .filter(g => g.winner !== null && g.opponent_id !== null)
       .map(g => ({
+        session_id,
         player1_id: user.id,
         player2_id: g.opponent_id,
         winner_id: g.winner,
@@ -40,10 +42,8 @@ export function MatchPlay() {
     })
 
     if (res.ok) {
-      setGames([{ id: 1, opponent_id: null, winner: null }])
+      setGames([{ id: 1, opponent_id: null, winner: null, session_id: null }])
     }
-
-
   }
 
   useEffect(() => {

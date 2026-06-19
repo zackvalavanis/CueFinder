@@ -10,6 +10,7 @@ class Match(Base):
     __tablename__ = "matches"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    session_id = Column(UUID(as_uuid=True), nullable=True)
     player1_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     player2_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     winner_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)

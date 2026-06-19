@@ -205,13 +205,62 @@
 }
 
 .leaderBoards {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  gap: 1.5rem;
 }
 
 .leaderBoards h1 {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -1px;
   color: black;
+}
+
+.leaderBoards table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(74, 222, 128, 0.15);
+  background: rgba(22, 163, 74, 0.08);
+}
+
+.leaderBoards th {
+  padding: 16px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #4ade80;
+  border-bottom: 1px solid rgba(74, 222, 128, 0.15);
+  text-align: center;
+}
+
+.leaderBoards td {
+  padding: 16px;
+  font-size: 15px;
+  font-weight: 500;
+  color: black;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  text-align: center;
+}
+
+.leaderBoards tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.leaderBoards tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.leaderBoards td:first-child {
+  color: #4ade80;
+  font-weight: 700;
 }
 
 .match-button {
@@ -307,5 +356,15 @@
     width: 300px;
     height: 200px;
     border-radius: 14px;
+  }
+
+  .leaderBoards h1 {
+    font-size: 24px;
+  }
+
+  .leaderBoards th,
+  .leaderBoards td {
+    padding: 12px 10px;
+    font-size: 13px;
   }
 }

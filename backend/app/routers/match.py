@@ -46,6 +46,7 @@ def create_match(
     db: Session = Depends(get_db),
 ):
     new_match = Match(
+        sessiod_id=match.session_id,
         player1_id=user.id,
         player2_id=match.player2_id,
         winner_id=match.winner_id,
@@ -109,6 +110,7 @@ def get_record(user: User = Depends(get_current_user), db: Session = Depends(get
 def create_session(matches: list[MatchesCreate], db: Session = Depends(get_db)):
     for m in matches:
         match = Match(
+            session_id=m.session_id,
             player1_id=m.player1_id,
             player2_id=m.player2_id,
             winner_id=m.winner_id,

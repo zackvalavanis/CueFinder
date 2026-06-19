@@ -15,6 +15,7 @@ class PlayerInfo(BaseModel):
 
 class MatchesResponse(BaseModel):
     id: UUID
+    session_id: UUID | None = None
     player1: PlayerInfo
     player2: PlayerInfo
     winner_id: UUID | None = None
@@ -25,6 +26,7 @@ class MatchesResponse(BaseModel):
 
 
 class MatchesCreate(BaseModel):
+    session_id: UUID
     player1_id: UUID
     player2_id: UUID
     winner_id: UUID | None = None

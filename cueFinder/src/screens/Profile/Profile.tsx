@@ -4,6 +4,7 @@ import { useEffect } from "react"
 import './Profile.css'
 import { ProfileModal } from "./ProfileModal"
 import type { MatchesResponse, PTablesResponse } from '../../types/types'
+import { MatchesModal } from "./MatchesModal"
 
 
 
@@ -19,6 +20,16 @@ export function Profile() {
   const [matches, setMatches] = useState<MatchesResponse[]>([])
   const wins = matches.filter(match => match.winner_id === user?.id).length
   const losses = matches.length - wins
+  const [isMatchesModalShowing, setIsMatchesModalShowing] = useState(false)
+  const [selectedGame, setSelectedGame] = useState<MatchesResponse[] | null>(null)
+
+
+  const groupedMatches = matches.reduce((acc, match) => {
+    const key = match.session_id ?? match.id
+    if (!acc[key]) acc[key] = []
+    acc[key].push(match)
+    return acc
+  }, {} as Record<string, MatchesResponse[]>)
 
 
   useEffect(() => {
@@ -28,7 +39,6 @@ export function Profile() {
     })
       .then(res => res.json())
       .then((data: MatchesResponse[]) => {
-        console.log(data[0])
         setMatches(data)
       })
   }, [token])
@@ -76,7 +86,6 @@ export function Profile() {
     if (!file) return alert('Please select a file first')
 
     const auth_token = token
-    console.log(auth_token)
 
     if (!token) alert("You are not authenticated")
 
@@ -95,7 +104,6 @@ export function Profile() {
       });
       if (res.ok) {
         const data = await res.json();
-        console.log("upload response: ", data)
         setSavedPhotoUrl(`http://localhost:8000${data.profile_photo_url}?t=${Date.now()}`)
         setFile(null)
         setPreview(null)
@@ -127,6 +135,15 @@ export function Profile() {
     if (res.ok) {
       alert("Profile updated!")
     }
+  }
+
+  const handleMatchesModalClose = () => {
+    setIsMatchesModalShowing(false)
+  }
+
+  const handleMatchesModalOpen = (sessionMatches: MatchesResponse[]) => {
+    setSelectedGame(sessionMatches)
+    setIsMatchesModalShowing(true)
   }
 
   return (
@@ -198,20 +215,20 @@ export function Profile() {
           {matches.length === 0 ? (
             <p style={{ fontSize: '13px', color: '#888', margin: 0 }}>No Matches Yet</p>
           ) : (
-            matches.map((match) => (
-              <div key={String(match.id)}>
-                <div className='ind-matches'>
-                  <h2>{match.player1?.first_name}</h2>
-                  <h2>vs.</h2>
-                  <h2>{match.player2?.first_name}</h2>
-                  <h2>{match.player1?.id === match.winner_id ? match.player1?.first_name : match.player2?.first_name} won</h2>
-                </div>
+            Object.entries(groupedMatches).map(([sessionId, sessionMatches]) => (
+              <div key={sessionId} className='ind-matches' onClick={() => handleMatchesModalOpen(sessionMatches)}>
+                <h2>{new Date(sessionMatches[0].played_at).toLocaleDateString()}</h2>
+                <p>{sessionMatches.length} game{sessionMatches.length > 1 ? 's' : ''}</p>
               </div>
             ))
           )}
           {/* Add record Below */}
         </div>
+        <div className='profile-card'>
+          <h2>Head to Head</h2>
+        </div>
       </div>
+
       <ProfileModal
         show={isModalShowing}
         onClose={() => setIsModalShowing(false)}
@@ -221,6 +238,12 @@ export function Profile() {
         preview={preview}
         savedPhotoUrl={savedPhotoUrl}
       />
+      <MatchesModal
+        show={isMatchesModalShowing}
+        onClose={handleMatchesModalClose}
+        matches={selectedGame}
+      >
+      </MatchesModal>
     </div >
   )
 }
