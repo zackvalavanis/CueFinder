@@ -10,13 +10,15 @@ import type { MatchesResponse, PTablesResponse } from '../../types/types'
 export function Profile() {
   const [file, setFile] = useState<File | null>(null)
   const [uploading, setUploading] = useState(false)
-  const { token } = useAuth()
+  const { token, user } = useAuth()
   const [savedPhotoUrl, setSavedPhotoUrl] = useState<string | null>(null)
   const [isModalShowing, setIsModalShowing] = useState(false)
   const [preview, setPreview] = useState<string | null>(null)
   const [formData, setFormData] = useState({ first_name: '', last_name: '', email: '' })
   const [poolTables, setPoolTables] = useState<PTablesResponse[]>([])
   const [matches, setMatches] = useState<MatchesResponse[]>([])
+  const wins = matches.filter(match => match.winner_id === user?.id).length
+  const losses = matches.length - wins
 
 
   useEffect(() => {
@@ -30,6 +32,7 @@ export function Profile() {
         setMatches(data)
       })
   }, [token])
+
 
   useEffect(() => {
     if (!token) return
@@ -191,6 +194,7 @@ export function Profile() {
         <div className='profile-card'>
           {/* Add Matches below and to the backend*/}
           <h2>Matches</h2>
+          <p style={{ fontSize: '13px', color: '#888', margin: 0, marginBottom: '20px' }}>Record: {wins} - {losses}</p>
           {matches.length === 0 ? (
             <p style={{ fontSize: '13px', color: '#888', margin: 0 }}>No Matches Yet</p>
           ) : (
@@ -206,7 +210,6 @@ export function Profile() {
             ))
           )}
           {/* Add record Below */}
-          <p style={{ fontSize: '13px', color: '#888', margin: 0 }}>Record: 1 - 2</p>
         </div>
       </div>
       <ProfileModal

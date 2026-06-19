@@ -33,11 +33,17 @@ export function MatchPlay() {
 
     if (payload.length === 0) return
 
-    await fetch('http://localhost:8000/matches/session', {
+    const res = await fetch('http://localhost:8000/matches/session', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify(payload)
     })
+
+    if (res.ok) {
+      setGames([{ id: 1, opponent_id: null, winner: null }])
+    }
+
+
   }
 
   useEffect(() => {
