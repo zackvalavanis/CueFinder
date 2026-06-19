@@ -13,6 +13,14 @@ class PlayerInfo(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+class PTableInfo(BaseModel):
+    id: UUID
+    name: str | None = None
+    location: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
 class MatchesResponse(BaseModel):
     id: UUID
     session_id: UUID | None = None
@@ -21,7 +29,7 @@ class MatchesResponse(BaseModel):
     winner_id: UUID | None = None
     location: str | None = None
     played_at: datetime
-    p_table_id: UUID | None = None
+    p_table: PTableInfo | None = None
 
     model_config = ConfigDict(from_attributes=True)
 

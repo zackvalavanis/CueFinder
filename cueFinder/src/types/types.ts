@@ -65,11 +65,12 @@ export interface PTablesResponse {
 
 export interface MatchesResponse {
   id: string
-  session_id: string
-  winner_id: string
+  session_id: string | null
+  winner_id: string | null
   played_at: string
   player1: { id: string; first_name: string; last_name: string }
   player2: { id: string; first_name: string; last_name: string }
+  p_table: { id: string; name: string | null; location: string } | null
 }
 
 

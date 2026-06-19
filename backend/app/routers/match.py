@@ -17,7 +17,11 @@ router = APIRouter()
 def get_all_matches(db: Session = Depends(get_db)):
     matches = (
         db.query(Match)
-        .options(joinedload(Match.player1), joinedload(Match.player2))
+        .options(
+            joinedload(Match.player1),
+            joinedload(Match.player2),
+            joinedload(Match.p_table),
+        )
         .all()
     )
     return matches
@@ -29,7 +33,11 @@ def get_my_matches(
 ):
     matches = (
         db.query(Match)
-        .options(joinedload(Match.player1), joinedload(Match.player2))
+        .options(
+            joinedload(Match.player1),
+            joinedload(Match.player2),
+            joinedload(Match.p_table),
+        )
         .filter(
             (Match.player1_id == current_user.id)
             | (Match.player2_id == current_user.id)
