@@ -5,6 +5,7 @@ from pydantic import ConfigDict
 
 
 class PTablesResponse(BaseModel):
+    name: str | None = None
     id: UUID
     place_id: str
     rating: float | None = None
@@ -16,6 +17,7 @@ class PTablesResponse(BaseModel):
 
 
 class PTablesCreate(BaseModel):
+    name: str | None = None
     rating: float | None = None
     table_size: float | None = None
     location: str

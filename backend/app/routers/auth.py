@@ -14,9 +14,6 @@ from app.utils.auth import create_access_token
 import os
 from app.config import settings
 
-print("CLIENT ID:", settings.GOOGLE_CLIENT_ID)
-
-
 router = APIRouter()
 
 oauth = OAuth()

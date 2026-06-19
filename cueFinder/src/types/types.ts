@@ -54,6 +54,7 @@ export interface PoolTable {
 }
 
 export interface PTablesResponse {
+  name: string
   place_id: string
   id: string
   rating: number | null

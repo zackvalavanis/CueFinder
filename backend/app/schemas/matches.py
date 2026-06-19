@@ -21,6 +21,7 @@ class MatchesResponse(BaseModel):
     winner_id: UUID | None = None
     location: str | None = None
     played_at: datetime
+    p_table_id: UUID | None = None
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -31,3 +32,4 @@ class MatchesCreate(BaseModel):
     player2_id: UUID
     winner_id: UUID | None = None
     location: str | None = None
+    p_table_id: UUID | None = None

@@ -115,6 +115,7 @@ def create_session(matches: list[MatchesCreate], db: Session = Depends(get_db)):
             player2_id=m.player2_id,
             winner_id=m.winner_id,
             played_at=datetime.utcnow(),
+            p_table_id=m.p_table_id,
         )
         db.add(match)
     db.commit()

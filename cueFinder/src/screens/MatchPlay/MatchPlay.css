@@ -178,6 +178,44 @@
   background: #15803d;
 }
 
+.table-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+}
+
+.table-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(74, 222, 128, 0.15);
+  background: rgba(22, 163, 74, 0.08);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+}
+
+.table-card p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+.table-card:hover {
+  border-color: rgba(74, 222, 128, 0.4);
+  background: rgba(22, 163, 74, 0.15);
+}
+
+.table-card.active {
+  border-color: #16a34a;
+  background: rgba(22, 163, 74, 0.25);
+  color: white;
+}
+
 /* ── Mobile ── */
 @media (max-width: 768px) {
   .match-play-page {

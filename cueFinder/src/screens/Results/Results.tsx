@@ -38,6 +38,7 @@ export function Results() {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
+          name: table.name,
           place_id: table.place_id,
           rating: table.rating,
           location: table.address

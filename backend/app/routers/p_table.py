@@ -43,6 +43,7 @@ def new_p_table(
         raise HTTPException(status_code=409, detail="Table already saved")
 
     new_p_table = P_Table(
+        name=new_p_table.name,
         rating=new_p_table.rating,
         location=new_p_table.location,
         table_size=new_p_table.table_size,

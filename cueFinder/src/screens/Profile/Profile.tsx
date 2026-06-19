@@ -51,6 +51,7 @@ export function Profile() {
     })
       .then(res => res.json())
       .then((data: PTablesResponse[]) => {
+        console.log(data)
         setPoolTables(data)
       })
   }, [token])
@@ -201,6 +202,7 @@ export function Profile() {
           ) : (
             poolTables.map((poolTable) => (
               <div key={String(poolTable.id)}>
+                <h2>{poolTable.name}</h2>
                 <h2>{poolTable.location}</h2>
                 {poolTable.rating && <span>⭐ {poolTable.rating}</span>}
               </div>

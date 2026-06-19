@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import type { PublicUser } from "../../types/types"
+import type { PTablesResponse, PublicUser } from "../../types/types"
 import './MatchPlay.css'
 import { useAuth } from "../Components/useAuth"
 import type { Game } from "../../types/types"
@@ -9,6 +9,9 @@ export function MatchPlay() {
   const [loading, setLoading] = useState(false)
   const { user, token } = useAuth()
   const [games, setGames] = useState<Game[]>([{ id: 1, opponent_id: null, winner: null, session_id: null }])
+  const [poolTables, setPoolTables] = useState<PTablesResponse[]>([])
+  const [selectedTable, setSelectedTable] = useState<string>('')
+
 
   const addGame = () => {
     setGames(prev => [...prev, { id: prev.length + 1, opponent_id: null, winner: null, session_id: null }])
@@ -31,6 +34,7 @@ export function MatchPlay() {
         player1_id: user.id,
         player2_id: g.opponent_id,
         winner_id: g.winner,
+        p_table_id: selectedTable || null
       }))
 
     if (payload.length === 0) return
@@ -62,16 +66,30 @@ export function MatchPlay() {
     handleUserFetch()
   }, [])
 
+  useEffect(() => {
+    if (!token) return
+    fetch('http://localhost:8000/p_tables', {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => res.json())
+      .then(data => setPoolTables(data))
+  }, [token])
+
+
+
   return (
     <div className='match-play-page'>
       <div className='players-container'>
         <h1>Set up Match</h1>
+
+
         <div className='match-grid'>
           {loading ? <p>Loading...</p> : (
             <table>
               <thead>
                 <tr>
                   <th>Game</th>
+                  <th>Location</th>
                   <th>Opponent</th>
                   <th>You</th>
                   <th>Them</th>
@@ -81,6 +99,19 @@ export function MatchPlay() {
                 {games.map((game) => (
                   <tr key={game.id}>
                     <td>Game {game.id}</td>
+                    <td>
+                      <select
+                        value={selectedTable}
+                        onChange={(e) => setSelectedTable(e.target.value)}
+                      >
+                        <option value="">Select location</option>
+                        {poolTables.map(t => (
+                          <option key={t.id} value={t.id}>
+                            {t.name ?? t.location}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
                     <td>
                       <select
                         value={game.opponent_id ?? ""}
