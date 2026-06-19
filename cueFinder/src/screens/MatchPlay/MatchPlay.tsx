@@ -97,7 +97,7 @@ export function MatchPlay() {
                     <td>
                       <button
                         className={`winner-btn ${game.winner === user?.id ? 'active' : ''}`}
-                        onClick={() => updateGame(game.id, 'winner', user?.id!)}
+                        onClick={() => { if (user?.id) updateGame(game.id, 'winner', user.id) }}
                       >
                         {user?.first_name}
                       </button>

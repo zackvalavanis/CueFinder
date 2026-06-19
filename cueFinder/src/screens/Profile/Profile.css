@@ -126,6 +126,8 @@
 }
 
 .ind-matches {
+  cursor: pointer;
+  text-decoration: underline;
   display: flex;
   gap: 20px;
 }

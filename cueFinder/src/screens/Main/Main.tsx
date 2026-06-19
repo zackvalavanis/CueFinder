@@ -15,6 +15,17 @@ export function Main() {
   const [leaderboard, setLeaderboard] = useState<Leaderboard[]>([])
 
   useEffect(() => {
+    const hash = window.location.hash
+    if (hash) {
+      setTimeout(() => {
+        const el = document.querySelector(hash)
+        if (el) el.scrollIntoView({ behavior: 'smooth' })
+      }, 100)
+    }
+  }, [])
+
+
+  useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current)
 
     if (!address.trim() || address.length < 3) return

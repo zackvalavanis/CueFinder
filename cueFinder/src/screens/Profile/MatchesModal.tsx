@@ -18,11 +18,11 @@ export function MatchesModal({ show, onClose, matches }: MatchesModalProps) {
             <div key={match.id} className='modal-game-row'>
               <span>Game {index + 1}</span>
               <span>{match.player1.first_name} vs {match.player2.first_name}</span>
-              <span>{match.player1.id === match.winner_id ? match.player1.first_name : match.player2.first_name} won</span>
+              <span style={{ color: match.player1.id == match.winner_id ? '' : 'red' }}>{match.player1.id === match.winner_id ? match.player1.first_name : match.player2.first_name} won</span>
             </div>
           ))}
         </div>
       </div>
-    </div>
+    </div >
   )
 }
