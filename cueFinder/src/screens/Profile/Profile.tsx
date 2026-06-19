@@ -3,7 +3,7 @@ import { useAuth } from "../Components/useAuth"
 import { useEffect } from "react"
 import './Profile.css'
 import { ProfileModal } from "./ProfileModal"
-import type { MatchesResponse, PTablesResponse } from '../../types/types'
+import type { MatchesResponse, PTablesResponse, PublicUser } from '../../types/types'
 import { MatchesModal } from "./MatchesModal"
 
 
@@ -147,6 +147,24 @@ export function Profile() {
     setIsMatchesModalShowing(true)
   }
 
+  const headToHead = matches.reduce((acc, match) => {
+    const opponent = match.player1.id === user?.id ? match.player2 : match.player1
+
+    if (!acc[opponent.id]) {
+      acc[opponent.id] = { player: opponent, wins: 0, losses: 0, total: 0 }
+    }
+
+    acc[opponent.id].total += 1
+    if (match.winner_id === user?.id) {
+      acc[opponent.id].wins += 1
+    } else {
+      acc[opponent.id].losses += 1
+    }
+
+    return acc
+  }, {} as Record<string, { player: { id: string; first_name: string; last_name: string }, wins: number, losses: number, total: number }>)
+
+
   return (
     <div className='profile-page'>
 
@@ -200,11 +218,10 @@ export function Profile() {
           {poolTables.length === 0 ? (
             <p style={{ fontSize: '13px', color: '#888', margin: 0 }}>No saved locations yet.</p>
           ) : (
-            poolTables.map((poolTable) => (
-              <div key={String(poolTable.id)}>
+            poolTables.map((poolTable, index) => (
+              <div style={{ display: 'flex', justifyContent: 'left', alignItems: 'center', gap: '20px', textAlign: 'center' }} key={String(poolTable.id)}>
+                <h2>{index + 1}.</h2>
                 <h2>{poolTable.name}</h2>
-                <h2>{poolTable.location}</h2>
-                {poolTable.rating && <span>⭐ {poolTable.rating}</span>}
               </div>
             ))
           )}
@@ -218,9 +235,9 @@ export function Profile() {
             <p style={{ fontSize: '13px', color: '#888', margin: 0 }}>No Matches Yet</p>
           ) : (
             Object.entries(groupedMatches).map(([sessionId, sessionMatches]) => (
-              <div key={sessionId} className='ind-matches' onClick={() => handleMatchesModalOpen(sessionMatches)}>
-                <h2>{new Date(sessionMatches[0].played_at).toLocaleDateString()}</h2>
-                <p>{sessionMatches.length} game{sessionMatches.length > 1 ? 's' : ''}</p>
+              <div className='ind-matches' key={sessionId}>
+                <h2 onClick={() => handleMatchesModalOpen(sessionMatches)}>{new Date(sessionMatches[0].played_at).toLocaleDateString()}</h2>
+                <p onClick={() => handleMatchesModalOpen(sessionMatches)}>{sessionMatches.length} game{sessionMatches.length > 1 ? 's' : ''}</p>
               </div>
             ))
           )}
@@ -228,6 +245,16 @@ export function Profile() {
         </div>
         <div className='profile-card'>
           <h2>Head to Head</h2>
+          {Object.keys(headToHead).length === 0 ? (
+            <p style={{ fontSize: '13px', color: '#888', margin: 0 }}>No matches yet</p>
+          ) : (
+            Object.values(headToHead).map(({ player, wins, losses }) => (
+              <div key={player.id} className='ind-matches'>
+                <h2>{player.first_name} {player.last_name}</h2>
+                <p>{wins} - {losses}</p>
+              </div>
+            ))
+          )}
         </div>
       </div>
 
