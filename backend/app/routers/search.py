@@ -18,6 +18,7 @@ class AddressRequest(BaseModel):
 class LatLng(BaseModel):
     lat: float
     lng: float
+    name: str | None = None
 
 
 logger = logging.getLogger(__name__)
@@ -40,13 +41,14 @@ async def geocode(body: AddressRequest):
 
 @router.post("/nearby")
 async def nearby(body: LatLng):
+    keyword = body.name if body.name else "billiards pool table"
     async with httpx.AsyncClient() as client:
         res = await client.get(
             "https://maps.googleapis.com/maps/api/place/nearbysearch/json",
             params={
                 "location": f"{body.lat},{body.lng}",
                 "rankby": "distance",  # replaces radius
-                "keyword": "bar pool table billiards",
+                "keyword": keyword,
                 "key": GOOGLE_API_KEY,
             },
         )

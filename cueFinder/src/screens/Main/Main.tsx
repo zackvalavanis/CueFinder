@@ -13,6 +13,7 @@ export function Main() {
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const { user } = useAuth()
   const [leaderboard, setLeaderboard] = useState<Leaderboard[]>([])
+  const [searchName, setSearchName] = useState<string | null>('')
 
   useEffect(() => {
     const hash = window.location.hash
@@ -76,7 +77,7 @@ export function Main() {
       const nearbyRes = await fetch('http://localhost:8000/api/search/nearby', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lat, lng })
+        body: JSON.stringify({ lat, lng, name: predictions.length === 0 ? address : null })
       })
       if (!nearbyRes.ok) throw new Error('Could not fetch nearby tables')
       const { results } = await nearbyRes.json()
