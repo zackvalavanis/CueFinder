@@ -75,3 +75,11 @@ export interface Game {
   opponent_id: string | null
   winner: string | null
 }
+
+export interface Leaderboard {
+  id: string
+  first_name: string
+  last_name: string
+  wins: number
+  losses: number
+}

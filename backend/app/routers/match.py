@@ -117,3 +117,32 @@ def create_session(matches: list[MatchesCreate], db: Session = Depends(get_db)):
         db.add(match)
     db.commit()
     return {"Saved:", len(matches)}
+
+
+@router.get("/leaderboard")
+def get_leaderboard(db: Session = Depends(get_db)):
+    users = db.query(User).all()
+
+    result = []
+
+    for user in users:
+        wins = db.query(Match).filter(Match.winner_id == user.id).count()
+        losses = (
+            db.query(Match)
+            .filter(
+                ((Match.player1_id == user.id) | (Match.player2_id == user.id)),
+                Match.winner_id != user.id,
+                Match.winner_id != None,
+            )
+            .count()
+        )
+        result.append(
+            {
+                "id": str(user.id),
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "wins": wins,
+                "losses": losses,
+            }
+        )
+    return sorted(result, key=lambda x: x["wins"], reverse=True)

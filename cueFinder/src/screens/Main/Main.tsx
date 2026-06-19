@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router'
 import { useState, useEffect, useRef } from 'react'
 import './Main.css'
 import { useAuth } from '../Components/useAuth'
+import type { Leaderboard } from '../../types/types'
 
 export function Main() {
   const navigate = useNavigate()
@@ -11,6 +12,7 @@ export function Main() {
   const [predictions, setPredictions] = useState<{ description: string, place_id: string }[]>([])
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const { user } = useAuth()
+  const [leaderboard, setLeaderboard] = useState<Leaderboard[]>([])
 
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current)
@@ -30,6 +32,15 @@ export function Main() {
       }
     }
   }, [address])
+
+  useEffect(() => {
+    fetch('http://localhost:8000/leaderboard')
+      .then(res => res.json())
+      .then(data => setLeaderboard(data))
+      .catch(err => console.error(err))
+  }, [])
+
+  console.log(leaderboard)
 
   const handleSelect = (description: string) => {
     setAddress(description)
@@ -143,7 +154,13 @@ export function Main() {
 
       <section className="section">
         <div className='leaderBoards'>
-          <h1 onClick={HandleFlipLeaderboards} >Leaderboards</h1>
+          <h1 onClick={HandleFlipLeaderboards}>Leaderboards</h1>
+          {leaderboard.map(leaders => (
+            <div key={leaders.id}>
+              <h1>{leaders.first_name}</h1>
+
+            </div>
+          ))}
         </div>
       </section>
     </div>
