@@ -155,12 +155,26 @@ export function Main() {
       <section className="section">
         <div className='leaderBoards'>
           <h1 onClick={HandleFlipLeaderboards}>Leaderboards</h1>
-          {leaderboard.map(leaders => (
-            <div key={leaders.id}>
-              <h1>{leaders.first_name}</h1>
-
-            </div>
-          ))}
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Wins</th>
+                <th>Losses</th>
+              </tr>
+            </thead>
+            <tbody>
+              {leaderboard.map((leaders, index) => (
+                <tr key={leaders.id}>
+                  <td>{index + 1}</td>
+                  <td>{leaders.first_name}</td>
+                  <td>{leaders.wins}</td>
+                  <td>{leaders.losses}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </section>
     </div>
