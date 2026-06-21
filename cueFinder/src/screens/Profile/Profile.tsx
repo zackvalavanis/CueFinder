@@ -177,7 +177,7 @@ export function Profile() {
           </div>
         </div>
         <p className="profile-name">{formData.first_name} {formData.last_name}</p>
-        <p className="profile-role">Member since 2024</p>
+        {/* <p className="profile-role">Member since {}</p> */}
       </div>
 
       {/* Main */}
@@ -234,7 +234,7 @@ export function Profile() {
           {matches.length === 0 ? (
             <p style={{ fontSize: '13px', color: '#888', margin: 0 }}>No Matches Yet</p>
           ) : (
-            Object.entries(groupedMatches).map(([sessionId, sessionMatches]) => (
+            Object.entries(groupedMatches).sort().map(([sessionId, sessionMatches]) => (
               <div className='ind-matches' key={sessionId}>
                 <h2 onClick={() => handleMatchesModalOpen(sessionMatches)}>{new Date(sessionMatches[0].played_at).toLocaleDateString()}</h2>
                 <p onClick={() => handleMatchesModalOpen(sessionMatches)}>{sessionMatches.length} game{sessionMatches.length > 1 ? 's' : ''}</p>

@@ -47,6 +47,7 @@ export function MatchPlay() {
 
     if (res.ok) {
       setGames([{ id: 1, opponent_id: null, winner: null, session_id: null }])
+      alert("Saved Session")
     }
   }
 
