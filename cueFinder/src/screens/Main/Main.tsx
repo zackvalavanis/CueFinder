@@ -159,7 +159,12 @@ export function Main() {
         </div>
         <div>
           {user && (
-            <button className='match-button' onClick={() => navigate('/Match-play')}>Match Play</button>
+            <button className='match-button' onClick={() => navigate('/Match-play')}>
+              <span className="pocket top-left"></span>
+              <span className="pocket top-right"></span>
+              <span className="pocket bottom-left"></span>
+              <span className="pocket bottom-right"></span>
+              Match Play</button>
           )}
         </div>
       </section>
