@@ -3,18 +3,22 @@ import type { PTablesResponse, PublicUser } from "../../types/types"
 import './MatchPlay.css'
 import { useAuth } from "../Components/useAuth"
 import type { Game } from "../../types/types"
+import { useLocation } from "react-router"
+import type { PoolTable } from "../../types/types"
+
 
 export function MatchPlay() {
   const [players, setPlayers] = useState<PublicUser[]>([])
   const [loading, setLoading] = useState(false)
   const { user, token } = useAuth()
-  const [games, setGames] = useState<Game[]>([{ id: 1, opponent_id: null, winner: null, session_id: null }])
   const [poolTables, setPoolTables] = useState<PTablesResponse[]>([])
-  const [selectedTable, setSelectedTable] = useState<string>('')
+  const location = useLocation()
+  const table: PoolTable = location.state?.table
+  const [games, setGames] = useState<Game[]>([{ id: 1, opponent_id: null, winner: null, session_id: null, table_id: table?.place_id ?? null }])
 
 
   const addGame = () => {
-    setGames(prev => [...prev, { id: prev.length + 1, opponent_id: null, winner: null, session_id: null }])
+    setGames(prev => [...prev, { id: prev.length + 1, opponent_id: null, winner: null, session_id: null, table_id: null }])
   }
 
   const updateGame = (id: number, field: keyof Game, value: string) => {
@@ -34,9 +38,9 @@ export function MatchPlay() {
         player1_id: user.id,
         player2_id: g.opponent_id,
         winner_id: g.winner,
-        p_table_id: selectedTable || null
+        p_table_id: poolTables.find(t => t.place_id === g.table_id)?.id ?? null
       }))
-
+    console.log("payload:", JSON.stringify(payload, null, 2))
     if (payload.length === 0) return
 
     const res = await fetch('http://localhost:8000/matches/session', {
@@ -46,7 +50,7 @@ export function MatchPlay() {
     })
 
     if (res.ok) {
-      setGames([{ id: 1, opponent_id: null, winner: null, session_id: null }])
+      setGames([{ id: 1, opponent_id: null, winner: null, session_id: null, table_id: table?.place_id ?? null }])
       alert("Saved Session")
     }
   }
@@ -102,12 +106,15 @@ export function MatchPlay() {
                     <td>Game {game.id}</td>
                     <td>
                       <select
-                        value={selectedTable}
-                        onChange={(e) => setSelectedTable(e.target.value)}
+                        value={game.table_id ?? ""}
+                        onChange={(e) => updateGame(game.id, 'table_id', e.target.value)}
                       >
                         <option value="">Select location</option>
+                        {table && !poolTables.some(t => t.place_id === table.place_id) && (
+                          <option value={table.place_id}>{table.name}</option>
+                        )}
                         {poolTables.map(t => (
-                          <option key={t.id} value={t.id}>
+                          <option key={t.id} value={t.place_id ?? String(t.id)}>
                             {t.name ?? t.location}
                           </option>
                         ))}

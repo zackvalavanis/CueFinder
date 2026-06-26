@@ -94,11 +94,27 @@ export function Results() {
                   Get Directions
                 </a>
                 {user && (
-                  <button
-                    className="like-button"
-                    onClick={() => LikeTable(table)}
-                    disabled={likedIds.has(table.place_id)}
-                  >{likedIds.has(table.place_id) ? 'Saved' : 'Like'}</button>
+                  <div className="buttons-right-container">
+                    <button
+                      className="like-button"
+                      onClick={() => LikeTable(table)}
+                      disabled={likedIds.has(table.place_id)}
+                    >{likedIds.has(table.place_id) ? 'Saved' : 'Like'}</button>
+
+                    <button
+                      className='start_match_button'
+                      onClick={() => {
+                        LikeTable(table)
+                        navigate('/Match-play', { state: { table } })
+                      }
+
+                      }
+
+                    >
+                      Start Match
+
+                    </button>
+                  </div>
                 )}
               </div>
             </div>

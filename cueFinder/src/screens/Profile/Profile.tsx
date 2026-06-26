@@ -234,8 +234,9 @@ export function Profile() {
           {matches.length === 0 ? (
             <p style={{ fontSize: '13px', color: '#888', margin: 0 }}>No Matches Yet</p>
           ) : (
-            Object.entries(groupedMatches).sort().map(([sessionId, sessionMatches]) => (
+            Object.entries(groupedMatches).sort().map(([sessionId, sessionMatches], index) => (
               <div className='ind-matches' key={sessionId}>
+                <h2>{index + 1}.</h2>
                 <h2 onClick={() => handleMatchesModalOpen(sessionMatches)}>{new Date(sessionMatches[0].played_at).toLocaleDateString()}</h2>
                 <p onClick={() => handleMatchesModalOpen(sessionMatches)}>{sessionMatches.length} game{sessionMatches.length > 1 ? 's' : ''}</p>
               </div>

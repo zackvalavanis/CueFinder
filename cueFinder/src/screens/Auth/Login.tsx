@@ -94,9 +94,6 @@ export function Login() {
             <div className='login-buttons-container'>
               <button type='submit' className="login-btn">Login</button>
               <span className="auth-divider">or</span>
-              <button className="apple-btn">
-                🍎 Sign in with Apple
-              </button>
               <button
                 className="google-btn"
                 onClick={() => window.location.href = 'http://localhost:8000/auth/google'}

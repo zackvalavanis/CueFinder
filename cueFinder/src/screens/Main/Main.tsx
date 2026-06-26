@@ -179,13 +179,14 @@ export function Main() {
                 <th>Name</th>
                 <th>Wins</th>
                 <th>Losses</th>
+
               </tr>
             </thead>
             <tbody>
               {leaderboard.map((leaders, index) => (
                 <tr key={leaders.id}>
                   <td>{index + 1}</td>
-                  <td>{leaders.first_name}</td>
+                  <td onClick={() => navigate('/Match-play')}>{leaders.first_name} {leaders.last_name}</td>
                   <td>{leaders.wins}</td>
                   <td>{leaders.losses}</td>
                 </tr>
