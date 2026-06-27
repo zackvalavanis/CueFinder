@@ -15,5 +15,6 @@ class P_Table(Base):
     table_size = Column(Float, nullable=True)
     location = Column(String, nullable=False)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
+    maps_url = Column(String, nullable=True)
 
     user = relationship("User", back_populates="p_tables")

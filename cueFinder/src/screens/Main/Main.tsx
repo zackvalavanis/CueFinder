@@ -13,7 +13,7 @@ export function Main() {
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const { user } = useAuth()
   const [leaderboard, setLeaderboard] = useState<Leaderboard[]>([])
-  const [searchName, setSearchName] = useState<string | null>('')
+  // const [searchName, setSearchName] = useState<string | null>('')
 
   useEffect(() => {
     const hash = window.location.hash
@@ -118,6 +118,7 @@ export function Main() {
               value={address}
               onChange={(e) => setAddress(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              onBlur={() => setTimeout(() => setPredictions([]), 150)}
             />
             <button onClick={handleSearch} disabled={loading}>
               {loading ? '...' : 'Search'}
@@ -186,7 +187,7 @@ export function Main() {
               {leaderboard.map((leaders, index) => (
                 <tr key={leaders.id}>
                   <td>{index + 1}</td>
-                  <td onClick={() => navigate('/Match-play')}>{leaders.first_name} {leaders.last_name}</td>
+                  <td className='player-name-leaderboard' onClick={user ? () => navigate('/Match-play', { state: { player_id: leaders.id } }) : undefined}>{leaders.first_name} {leaders.last_name}</td>
                   <td>{leaders.wins}</td>
                   <td>{leaders.losses}</td>
                 </tr>
@@ -194,7 +195,7 @@ export function Main() {
             </tbody>
           </table>
         </div>
-      </section>
-    </div>
+      </section >
+    </div >
   )
 }

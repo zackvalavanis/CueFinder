@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import { toast } from "react-toastify"
 import './Login.css'
 import { Eye, EyeOff } from 'lucide-react'
-import { GoogleLogin } from '@react-oauth/google'
+// import { GoogleLogin } from '@react-oauth/google'
 
 export function Login() {
   const { login } = useAuth();

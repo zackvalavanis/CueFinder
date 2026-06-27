@@ -313,9 +313,15 @@
   border: 4px solid #4b2b14;
 }
 
+.player-name-leaderboard {
+  color: black;
+  cursor: pointer;
+}
 
+.player-name-leaderboard:hover {
+  color: green;
 
-
+}
 
 @media (max-width: 768px) {
   .section1 {

@@ -49,6 +49,7 @@ def new_p_table(
         table_size=new_p_table.table_size,
         user_id=user.id,
         place_id=new_p_table.place_id,
+        maps_url=new_p_table.maps_url,
     )
     db.add(new_p_table)
     db.commit()

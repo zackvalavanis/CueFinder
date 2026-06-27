@@ -12,6 +12,7 @@ class PTablesResponse(BaseModel):
     table_size: float | None = None
     location: str
     user_id: uuid.UUID
+    maps_url: str | None = None
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -22,3 +23,4 @@ class PTablesCreate(BaseModel):
     table_size: float | None = None
     location: str
     place_id: str
+    maps_url: str | None = None

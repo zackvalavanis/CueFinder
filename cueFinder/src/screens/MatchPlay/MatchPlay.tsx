@@ -1,24 +1,50 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import type { PTablesResponse, PublicUser } from "../../types/types"
 import './MatchPlay.css'
 import { useAuth } from "../Components/useAuth"
 import type { Game } from "../../types/types"
-import { useLocation } from "react-router"
+import { useLocation, useNavigate } from "react-router"
 import type { PoolTable } from "../../types/types"
 
 
 export function MatchPlay() {
+  const navigate = useNavigate()
+  const [address, setAddress] = useState('')
+  const [error, setError] = useState('')
+  const [predictions, setPredictions] = useState<{ description: string, place_id: string }[]>([])
   const [players, setPlayers] = useState<PublicUser[]>([])
   const [loading, setLoading] = useState(false)
   const { user, token } = useAuth()
-  const [poolTables, setPoolTables] = useState<PTablesResponse[]>([])
   const location = useLocation()
+  const [poolTables, setPoolTables] = useState<PTablesResponse[]>([])
   const table: PoolTable = location.state?.table
-  const [games, setGames] = useState<Game[]>([{ id: 1, opponent_id: null, winner: null, session_id: null, table_id: table?.place_id ?? null }])
+  const player_id: string | null = location.state?.player_id
+  const [games, setGames] = useState<Game[]>([{ id: 1, opponent_id: player_id ?? null, winner: null, session_id: null, table_id: table?.place_id ?? null }])
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+
+    if (!address.trim() || address.length < 3) return
+
+    debounceRef.current = setTimeout(async () => {
+      const res = await fetch(`http://localhost:8000/api/search/autocomplete?input=${encodeURIComponent(address)}`)
+      const data = await res.json()
+      setPredictions(data.predictions)
+    }, 300)
+
+    return () => {
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current)
+        debounceRef.current = null
+      }
+    }
+  }, [address])
 
 
   const addGame = () => {
-    setGames(prev => [...prev, { id: prev.length + 1, opponent_id: null, winner: null, session_id: null, table_id: null }])
+    setGames(prev => [...prev, { id: prev.length + 1, opponent_id: player_id ?? null, winner: null, session_id: null, table_id: null }])
   }
 
   const updateGame = (id: number, field: keyof Game, value: string) => {
@@ -81,11 +107,80 @@ export function MatchPlay() {
   }, [token])
 
 
+  const handleSelect = (description: string) => {
+    setAddress(description)
+    setPredictions([])
+  }
+
+  const handleSearch = async () => {
+    if (!address.trim()) return
+    setLoading(true)
+    setError('')
+    setPredictions([])
+
+    try {
+      const geoRes = await fetch('http://localhost:8000/api/search/geocode', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ address })
+      })
+      if (!geoRes.ok) throw new Error('Could not find that address')
+      const { lat, lng } = await geoRes.json()
+
+      const nearbyRes = await fetch('http://localhost:8000/api/search/nearby', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lat, lng, name: predictions.length === 0 ? address : null })
+      })
+      if (!nearbyRes.ok) throw new Error('Could not fetch nearby tables')
+      const { results } = await nearbyRes.json()
+
+      navigate('/results', { state: { results } })
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
 
   return (
     <div className='match-play-page'>
       <div className='players-container'>
         <h1>Set up Match</h1>
+        <h3>Find a table</h3>
+        <section className='containerSearch-tables'>
+          <div className="search-container-wrapper">
+            <div className="search_button_match">
+              <input
+                type="text"
+                placeholder="Enter your address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                onBlur={() => setTimeout(() => setPredictions([]), 150)}
+              />
+              <button onClick={handleSearch} disabled={loading}>
+                {loading ? '...' : 'Search'}
+              </button>
+            </div>
+            {predictions.length > 0 && (
+              <ul className="autocomplete-list">
+                {predictions.map((p) => (
+                  <li
+                    key={p.place_id}
+                    onClick={() => handleSelect(p.description)}
+                    className="autocomplete-item"
+                  >
+                    {p.description}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          {error && <p className="search-error">{error}</p>}
+        </section>
 
 
         <div className='match-grid'>

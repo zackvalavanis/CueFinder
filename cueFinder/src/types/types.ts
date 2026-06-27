@@ -48,7 +48,7 @@ export interface PoolTable {
   address: string
   place_id: string
   rating: number | null
-  maps_url: string
+  maps_url: string | null
   lat: number
   lng: number
 }
@@ -61,6 +61,7 @@ export interface PTablesResponse {
   table_size: number | null
   location: string
   user_id: string
+  maps_url: string | null
 }
 
 export interface MatchesResponse {

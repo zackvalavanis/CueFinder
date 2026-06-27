@@ -132,6 +132,20 @@
   gap: 20px;
 }
 
+.ind-matches:hover {
+  transform: scale(1.0002);
+  color: green;
+}
+
+.fav-locations {
+  cursor: pointer;
+}
+
+.fav-locations:hover {
+  transform: scale(1.0002);
+  color: green;
+}
+
 @media (max-width: 768px) {
   .profile-page {
     flex-direction: column;

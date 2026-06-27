@@ -28,6 +28,8 @@ export function Results() {
       })
   }, [token])
 
+  console.log(results)
+
 
   const LikeTable = async (table: PoolTable) => {
     try {
@@ -41,7 +43,8 @@ export function Results() {
           name: table.name,
           place_id: table.place_id,
           rating: table.rating,
-          location: table.address
+          location: table.address,
+          maps_url: table.maps_url
         })
       })
       if (!res.ok) throw new Error("Failed to save the new table")

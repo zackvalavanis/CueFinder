@@ -3,7 +3,7 @@ import { useAuth } from "../Components/useAuth"
 import { useEffect } from "react"
 import './Profile.css'
 import { ProfileModal } from "./ProfileModal"
-import type { MatchesResponse, PTablesResponse, PublicUser } from '../../types/types'
+import type { MatchesResponse, PTablesResponse } from '../../types/types'
 import { MatchesModal } from "./MatchesModal"
 
 
@@ -22,6 +22,7 @@ export function Profile() {
   const losses = matches.length - wins
   const [isMatchesModalShowing, setIsMatchesModalShowing] = useState(false)
   const [selectedGame, setSelectedGame] = useState<MatchesResponse[] | null>(null)
+
 
 
   const groupedMatches = matches.reduce((acc, match) => {
@@ -55,6 +56,8 @@ export function Profile() {
         setPoolTables(data)
       })
   }, [token])
+
+  console.log(poolTables)
 
   useEffect(() => {
     if (!token) return
@@ -219,9 +222,9 @@ export function Profile() {
             <p style={{ fontSize: '13px', color: '#888', margin: 0 }}>No saved locations yet.</p>
           ) : (
             poolTables.map((poolTable, index) => (
-              <div style={{ display: 'flex', justifyContent: 'left', alignItems: 'center', gap: '20px', textAlign: 'center' }} key={String(poolTable.id)}>
+              <div className='fav-locations' style={{ display: 'flex', justifyContent: 'left', alignItems: 'center', gap: '20px', textAlign: 'center' }} key={String(poolTable.id)}>
                 <h2>{index + 1}.</h2>
-                <h2>{poolTable.name}</h2>
+                <h2 onClick={() => window.open(poolTable.maps_url ?? undefined)}>{poolTable.name}</h2>
               </div>
             ))
           )}
