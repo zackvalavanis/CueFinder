@@ -108,7 +108,7 @@ export function Main() {
 
   return (
     <div className="main-page">
-      <section className="section1">
+      <section id='search-tables' className="section1">
         <h1>Find Pool Tables Near You</h1>
         <div className="search-wrapper">
           <div className="search_button">
@@ -145,27 +145,36 @@ export function Main() {
         <p className="middle-heading">Why CueFinder</p>
         <h2 className="middle-title">Everything you need at the table.</h2>
         <div className="middle-middle">
-          <div className="middle-boxes">
-            <span className="icon">🎱</span>
-            <h1>Search for pool tables nearby.</h1>
-          </div>
+          <a style={{ textDecoration: 'none' }} href='#search-tables'>
+            <div className="middle-boxes">
+              <span className="icon">🎱</span>
+              <h1>Search for pool tables nearby.</h1>
+            </div>
+          </a>
           <div className="middle-boxes">
             <span className="icon">⭐</span>
             <h1>Save your favorite tables to your profile.</h1>
           </div>
-          <div className="middle-boxes">
-            <span className="icon">📊</span>
-            <h1>Track games and history against your competition.</h1>
-          </div>
+          <a style={{ textDecoration: 'none' }} href='#leaderboard'>
+            <div className="middle-boxes">
+              <span className="icon">📊</span>
+              <h1>Track games and history against your competition.</h1>
+            </div>
+          </a>
         </div>
         <div>
-          {user && (
+          {user ? (
             <button className='match-button' onClick={() => navigate('/Match-play')}>
               <span className="pocket top-left"></span>
               <span className="pocket top-right"></span>
               <span className="pocket bottom-left"></span>
               <span className="pocket bottom-right"></span>
               Match Play</button>
+          ) : (
+            <div className='match-play-section-2'>
+              <h1>Log in for match play</h1>
+              <button onClick={() => navigate('/login')}>Log in</button>
+            </div>
           )}
         </div>
       </section>
@@ -180,7 +189,6 @@ export function Main() {
                 <th>Name</th>
                 <th>Wins</th>
                 <th>Losses</th>
-
               </tr>
             </thead>
             <tbody>
