@@ -18,7 +18,7 @@ Base.metadata.create_all(bind=engine)
 app.add_middleware(
     CORSMiddleware,
     CORS_ORIGINS=["*"],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allow_headers=["*"],
     expose_headers=["*"],
