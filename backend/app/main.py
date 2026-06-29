@@ -38,4 +38,4 @@ app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 @app.get("/health")
 def health():
-    return {"status": "ok"}
+    return {"status": "ok", "port": os.environ.get("PORT", "NOT SET")}
