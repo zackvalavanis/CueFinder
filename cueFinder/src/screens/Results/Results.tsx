@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 
 export function Results() {
   const { token, user } = useAuth()
+  const api = import.meta.env.VITE_BACKEND_API
   const location = useLocation()
   const navigate = useNavigate()
   const results: PoolTable[] = location.state?.results ?? []
@@ -17,7 +18,7 @@ export function Results() {
 
   useEffect(() => {
     if (!token) return
-    fetch('http://localhost:8000/p_tables', {
+    fetch(`${api}/p_tables`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
@@ -33,7 +34,7 @@ export function Results() {
 
   const LikeTable = async (table: PoolTable) => {
     try {
-      const res = await fetch('http://localhost:8000/p_tables', {
+      const res = await fetch(`${api}/p_tables`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -92,7 +93,7 @@ export function Results() {
               <div className='buttons-right-side'>
                 <a
                   className='maps-btn'
-                  href={table.maps_url}
+                  href={table.maps_url ?? undefined}
                 >
                   Get Directions
                 </a>

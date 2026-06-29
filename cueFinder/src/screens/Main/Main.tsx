@@ -6,6 +6,7 @@ import type { Leaderboard } from '../../types/types'
 
 export function Main() {
   const navigate = useNavigate()
+  const api = import.meta.env.VITE_BACKEND_API
   const [address, setAddress] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -32,7 +33,7 @@ export function Main() {
     if (!address.trim() || address.length < 3) return
 
     debounceRef.current = setTimeout(async () => {
-      const res = await fetch(`http://localhost:8000/api/search/autocomplete?input=${encodeURIComponent(address)}`)
+      const res = await fetch(`${api}/api/search/autocomplete?input=${encodeURIComponent(address)}`)
       const data = await res.json()
       setPredictions(data.predictions)
     }, 300)
@@ -46,7 +47,7 @@ export function Main() {
   }, [address])
 
   useEffect(() => {
-    fetch('http://localhost:8000/leaderboard')
+    fetch(`${api}/leaderboard`)
       .then(res => res.json())
       .then(data => setLeaderboard(data))
       .catch(err => console.error(err))
@@ -66,7 +67,7 @@ export function Main() {
     setPredictions([])
 
     try {
-      const geoRes = await fetch('http://localhost:8000/api/search/geocode', {
+      const geoRes = await fetch(`${api}/api/search/geocode`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ address })
@@ -74,7 +75,7 @@ export function Main() {
       if (!geoRes.ok) throw new Error('Could not find that address')
       const { lat, lng } = await geoRes.json()
 
-      const nearbyRes = await fetch('http://localhost:8000/api/search/nearby', {
+      const nearbyRes = await fetch(`${api}/api/search/nearby`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ lat, lng, name: predictions.length === 0 ? address : null })
@@ -95,7 +96,7 @@ export function Main() {
   const HandleFlipLeaderboards = async () => {
     console.log('flipping')
     try {
-      const res = await fetch('http://localhost:8000/matches', {
+      const res = await fetch(`${api}/matches`, {
         method: 'GET'
       })
 

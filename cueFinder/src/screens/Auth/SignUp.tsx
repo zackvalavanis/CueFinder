@@ -6,6 +6,7 @@ import { toast } from "react-toastify"
 import { useNavigate } from "react-router"
 
 export function SignUp() {
+  const api = import.meta.env.VITE_BACKEND_API
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState<boolean>(false)
@@ -20,7 +21,7 @@ export function SignUp() {
     setIsLoading(true)
 
     try {
-      const res = await fetch('http://localhost:8000/users', {
+      const res = await fetch(`${api}/users`, {
         "method": "POST",
         "headers": {
           "Content-Type": "application/json"
@@ -87,7 +88,9 @@ export function SignUp() {
             {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
           </button>
         </div>
-        <button type='submit'>Sign Up</button>
+        <button type='submit' disabled={isLoading}>
+          {isLoading ? 'Signing up...' : 'Sign Up'}
+        </button>
       </form>
     </div>
   )

@@ -9,6 +9,7 @@ import type { PoolTable } from "../../types/types"
 
 export function MatchPlay() {
   const navigate = useNavigate()
+  const api = import.meta.env.VITE_BACKEND_API
   const [address, setAddress] = useState('')
   const [error, setError] = useState('')
   const [predictions, setPredictions] = useState<{ description: string, place_id: string }[]>([])
@@ -29,7 +30,7 @@ export function MatchPlay() {
     if (!address.trim() || address.length < 3) return
 
     debounceRef.current = setTimeout(async () => {
-      const res = await fetch(`http://localhost:8000/api/search/autocomplete?input=${encodeURIComponent(address)}`)
+      const res = await fetch(`${api}/api/search/autocomplete?input=${encodeURIComponent(address)}`)
       const data = await res.json()
       setPredictions(data.predictions)
     }, 300)
@@ -69,7 +70,7 @@ export function MatchPlay() {
     console.log("payload:", JSON.stringify(payload, null, 2))
     if (payload.length === 0) return
 
-    const res = await fetch('http://localhost:8000/matches/session', {
+    const res = await fetch(`${api}/matches/session`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify(payload)
@@ -85,7 +86,7 @@ export function MatchPlay() {
     const handleUserFetch = async () => {
       setLoading(true)
       try {
-        const res = await fetch('http://localhost:8000/users')
+        const res = await fetch(`${api}/users`)
         const data = await res.json()
         setPlayers(data)
       } catch (error) {
@@ -99,7 +100,7 @@ export function MatchPlay() {
 
   useEffect(() => {
     if (!token) return
-    fetch('http://localhost:8000/p_tables', {
+    fetch(`{api}/p_tables`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
@@ -119,7 +120,7 @@ export function MatchPlay() {
     setPredictions([])
 
     try {
-      const geoRes = await fetch('http://localhost:8000/api/search/geocode', {
+      const geoRes = await fetch(`{api}/api/search/geocode`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ address })
@@ -127,7 +128,7 @@ export function MatchPlay() {
       if (!geoRes.ok) throw new Error('Could not find that address')
       const { lat, lng } = await geoRes.json()
 
-      const nearbyRes = await fetch('http://localhost:8000/api/search/nearby', {
+      const nearbyRes = await fetch(`${api}/api/search/nearby`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ lat, lng, name: predictions.length === 0 ? address : null })

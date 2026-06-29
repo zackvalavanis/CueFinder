@@ -10,6 +10,7 @@ import { MatchesModal } from "./MatchesModal"
 
 export function Profile() {
   const [file, setFile] = useState<File | null>(null)
+  const api = import.meta.env.VITE_BACKEND_API
   const [uploading, setUploading] = useState(false)
   const { token, user } = useAuth()
   const [savedPhotoUrl, setSavedPhotoUrl] = useState<string | null>(null)
@@ -35,7 +36,7 @@ export function Profile() {
 
   useEffect(() => {
     if (!token) return
-    fetch('http://localhost:8000/matches/me', {
+    fetch(`${api}/matches/me`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
@@ -47,7 +48,7 @@ export function Profile() {
 
   useEffect(() => {
     if (!token) return
-    fetch('http://localhost:8000/p_tables', {
+    fetch(`${api}p_tables`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
@@ -61,7 +62,7 @@ export function Profile() {
 
   useEffect(() => {
     if (!token) return
-    fetch("http://localhost:8000/users/me", {
+    fetch(`${api}/users/me`, {
       headers: { "Authorization": `Bearer ${token}` }
     })
       .then(res => res.json())
@@ -99,7 +100,7 @@ export function Profile() {
     try {
       setUploading(true)
 
-      const res = await fetch("http://localhost:8000/users/me/profile-photo", {
+      const res = await fetch(`${api}/users/me/profile-photo`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${auth_token}`
@@ -108,7 +109,7 @@ export function Profile() {
       });
       if (res.ok) {
         const data = await res.json();
-        setSavedPhotoUrl(`http://localhost:8000${data.profile_photo_url}?t=${Date.now()}`)
+        setSavedPhotoUrl(`${api}}${data.profile_photo_url}?t=${Date.now()}`)
         setFile(null)
         setPreview(null)
         alert("Upload Completed")
@@ -128,7 +129,7 @@ export function Profile() {
   }
 
   const handleUpdateProfile = async () => {
-    const res = await fetch("http://localhost:8000/users/me", {
+    const res = await fetch(`${api}/users/me`, {
       method: "PATCH",
       headers: {
         "Authorization": `Bearer ${token}`,

@@ -4,6 +4,7 @@ import { AuthContext } from "./AuthContext"
 import type { User } from "../../types/types"
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const api = import.meta.env.VITE_BACKEND_API
   const [token, setToken] = useState<string | null>(localStorage.getItem('access_token'))
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -17,7 +18,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       try {
-        const res = await fetch("http://localhost:8000/users/me", {
+        const res = await fetch(`${api}/users/me`, {
           headers: {
             "Authorization": `Bearer ${token}`
           }

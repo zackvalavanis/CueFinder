@@ -8,6 +8,7 @@ import { Eye, EyeOff } from 'lucide-react'
 // import { GoogleLogin } from '@react-oauth/google'
 
 export function Login() {
+  const api = import.meta.env.VITE_BACKEND_API
   const { login } = useAuth();
   const navigate = useNavigate()
   const [formData, setFormData] = useState<LoginPage>({
@@ -21,7 +22,7 @@ export function Login() {
     setLoading(true)
 
     try {
-      const res = await fetch("http://localhost:8000/auth/login", {
+      const res = await fetch(`${api}/auth/login`, {
         "method": "POST",
         "headers": {
           "Content-Type": "application/json"
@@ -92,11 +93,13 @@ export function Login() {
               <button type='button' className='eye-toggle' onClick={() => setShowPassword(!showPassword)}>{showPassword ? <EyeOff size={16} /> : <Eye size={16} />}</button>
             </div>
             <div className='login-buttons-container'>
-              <button type='submit' className="login-btn">Login</button>
+              <button type='submit' disabled={loading}>
+                {loading ? 'Logging in...' : 'Login'}
+              </button>
               <span className="auth-divider">or</span>
               <button
                 className="google-btn"
-                onClick={() => window.location.href = 'http://localhost:8000/auth/google'}
+                onClick={() => window.location.href = `${api}/auth/google`}
               >
                 <img src="https://www.google.com/favicon.ico" width="16" height="16" />
                 Sign in with Google
