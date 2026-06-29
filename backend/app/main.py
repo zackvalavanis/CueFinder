@@ -15,7 +15,6 @@ app = FastAPI()
 
 Base.metadata.create_all(bind=engine)
 
-app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=CORS_ORIGINS,
@@ -25,6 +24,8 @@ app.add_middleware(
     expose_headers=["*"],
     max_age=3600,
 )
+
+app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
 
 app.include_router(user_router)
 app.include_router(p_tables_router)
