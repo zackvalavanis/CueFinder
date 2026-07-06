@@ -1,10 +1,14 @@
+/* ═══ Page ═══ */
 .match-play-page {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 4rem 2rem;
+  padding: 3rem 2rem 6rem;
   min-height: 100vh;
   gap: 2rem;
+  background: #0f0f0f;
+  color: white;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
 }
 
 .players-container {
@@ -17,39 +21,179 @@
 }
 
 .players-container h1 {
-  font-size: 32px;
+  font-size: 40px;
   font-weight: 800;
-  letter-spacing: -1px;
-  color: black;
+  letter-spacing: -1.5px;
+  color: white;
+  line-height: 1.1;
 }
 
-/* ── Select ── */
-.players-container select {
+.players-container h3 {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #4ade80;
+  margin: 0;
+}
+
+/* ═══ Search ═══ */
+.containerSearch-tables {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
   width: 100%;
+}
+
+.search-container-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+}
+
+.search_button_match {
+  display: flex;
+  gap: 10px;
+}
+
+.search_button_match input {
+  flex: 1;
   height: 48px;
   padding: 0 16px;
   border-radius: 10px;
-  border: 1px solid rgba(74, 222, 128, 0.25);
-  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
   color: white;
   font-size: 15px;
+  font-family: inherit;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.search_button_match input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.search_button_match input:focus {
+  border-color: rgba(74, 222, 128, 0.6);
+}
+
+.search_button_match button {
+  height: 48px;
+  padding: 0 1.6rem;
+  border: none;
+  border-radius: 10px;
+  background: #16a34a;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.search_button_match button:hover:not(:disabled) {
+  background: #15803d;
+}
+
+.search_button_match button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.search-error {
+  color: #f87171;
+  font-size: 13px;
+  margin: 0;
+}
+
+/* autocomplete dropdown */
+.autocomplete-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  z-index: 100;
+  overflow: hidden;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+.autocomplete-item {
+  padding: 12px 16px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: background 0.15s;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.autocomplete-item:last-child {
+  border-bottom: none;
+}
+
+.autocomplete-item:hover {
+  background: rgba(22, 163, 74, 0.2);
+  color: white;
+}
+
+/* ═══ Selects (shared) ═══ */
+.players-container select,
+.match-grid select {
+  border-radius: 8px;
+  border: 1px solid rgba(74, 222, 128, 0.25);
+  background: rgba(255, 255, 255, 0.06);
+  color: white;
+  font-family: inherit;
   outline: none;
   cursor: pointer;
   appearance: none;
   transition: border-color 0.2s;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%234ade80' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
 }
 
-.players-container select:focus {
+.players-container select:focus,
+.match-grid select:focus {
   border-color: rgba(74, 222, 128, 0.6);
 }
 
-/* ── Table card ── */
+.players-container select option,
+.match-grid select option {
+  background: #1a1a1a;
+  color: white;
+}
+
+.players-container select {
+  width: 100%;
+  height: 48px;
+  padding: 0 36px 0 16px;
+  font-size: 15px;
+}
+
+.match-grid select {
+  height: 38px;
+  padding: 0 30px 0 12px;
+  font-size: 13px;
+  max-width: 160px;
+}
+
+/* ═══ Match table (desktop) ═══ */
 .match-grid {
   width: 100%;
   max-width: 700px;
   border-radius: 16px;
   border: 1px solid rgba(74, 222, 128, 0.15);
-  background: rgba(22, 163, 74, 0.08);
+  background: rgba(22, 163, 74, 0.06);
   overflow: hidden;
 }
 
@@ -59,7 +203,7 @@
 }
 
 .match-grid th {
-  padding: 16px;
+  padding: 16px 12px;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 3px;
@@ -70,12 +214,12 @@
 }
 
 .match-grid td {
-  padding: 20px 12px;
+  padding: 18px 12px;
   text-align: center;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
-  color: black;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.85);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .match-grid tbody tr:last-child td {
@@ -86,41 +230,23 @@
   background: rgba(255, 255, 255, 0.03);
 }
 
-/* ── Per-row opponent select ── */
-.match-grid select {
-  height: 38px;
-  padding: 0 12px;
-  border-radius: 8px;
-  border: 1px solid rgba(74, 222, 128, 0.2);
-  background: rgba(0, 0, 0, 0.4);
-  color: black;
-  font-size: 13px;
-  outline: none;
-  cursor: pointer;
-  appearance: none;
-  transition: border-color 0.2s;
-}
-
-.match-grid select:focus {
-  border-color: rgba(74, 222, 128, 0.5);
-}
-
-/* ── Winner buttons ── */
+/* ═══ Winner buttons ═══ */
 .winner-btn {
-  padding: 8px 20px;
+  padding: 9px 18px;
   border-radius: 8px;
   border: 1px solid rgba(74, 222, 128, 0.2);
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.04);
   color: rgba(255, 255, 255, 0.6);
   font-size: 13px;
   font-weight: 600;
+  font-family: inherit;
   cursor: pointer;
   transition: all 0.15s;
 }
 
 .winner-btn:hover:not(:disabled) {
   border-color: rgba(74, 222, 128, 0.5);
-  color: black;
+  color: white;
   background: rgba(22, 163, 74, 0.15);
 }
 
@@ -135,9 +261,9 @@
   cursor: not-allowed;
 }
 
-/* ── Footer buttons ── */
+/* ═══ Footer / actions ═══ */
 .match-grid tfoot td {
-  padding: 16px;
+  padding: 14px 16px;
   border-top: 1px solid rgba(74, 222, 128, 0.1);
 }
 
@@ -147,6 +273,7 @@
   color: #4ade80;
   font-size: 13px;
   font-weight: 600;
+  font-family: inherit;
   padding: 10px 24px;
   border-radius: 8px;
   cursor: pointer;
@@ -169,6 +296,7 @@
   color: white;
   font-size: 16px;
   font-weight: 700;
+  font-family: inherit;
   cursor: pointer;
   transition: background 0.2s;
   letter-spacing: 0.3px;
@@ -178,6 +306,7 @@
   background: #15803d;
 }
 
+/* ═══ Table picker cards ═══ */
 .table-picker {
   display: flex;
   flex-wrap: wrap;
@@ -216,102 +345,163 @@
   color: white;
 }
 
-.containerSearch-tables {
-  display: flex;
-  min-height: auto;
-  gap: 20px;
-  justify-content: center;
-  align-items: center;
-}
-
-.search-container-wrapper {
-  position: relative;
-  width: 600px;
-}
-
-.search_button_match button {
-  cursor: pointer;
-  border: none;
-  width: 200px;
-  height: 50px;
-  border-radius: 10px;
-  margin-left: 20px;
-  background: #16a34a;
-  color: white;
-}
-
-.search_button_match button:hover {
-  background-color: #15803d;
-  color: white;
-}
-
-.search_button_match input {
-  height: 50px;
-  border-radius: 20px;
-  width: 300px;
-}
-
-.autocomplete-list {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: #1a1a1a;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 0 0 10px 10px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  z-index: 100;
-  overflow: hidden;
-}
-
-.autocomplete-item {
-  padding: 12px 20px;
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.8);
-  cursor: pointer;
-  transition: background 0.15s;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.autocomplete-item:last-child {
-  border-bottom: none;
-}
-
-.autocomplete-item:hover {
-  background: rgba(22, 163, 74, 0.2);
-  color: white;
-}
-
-/* ── Mobile ── */
+/* ═══ Mobile: table → stacked cards ═══ */
 @media (max-width: 768px) {
   .match-play-page {
-    padding: 2rem 1.25rem;
+    padding: 2rem 1rem 4rem;
   }
 
   .players-container h1 {
-    font-size: 24px;
+    font-size: 26px;
+    letter-spacing: -1px;
   }
 
-  .match-grid th {
-    font-size: 9px;
-    letter-spacing: 1.5px;
-    padding: 12px 6px;
+  /* search: stack input over button */
+  .search_button_match {
+    flex-direction: column;
+    gap: 10px;
   }
 
+  .search_button_match input {
+    width: 100%;
+    font-size: 16px;
+    /* stops iOS zoom-on-focus */
+  }
+
+  .search_button_match button {
+    width: 100%;
+  }
+
+  .players-container select {
+    font-size: 16px;
+    /* same iOS zoom fix */
+  }
+
+  /* strip the card chrome off the wrapper — rows become the cards */
+  .match-grid {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    overflow: visible;
+  }
+
+  .match-grid table,
+  .match-grid tbody,
+  .match-grid tfoot,
+  .match-grid tr,
   .match-grid td {
-    font-size: 13px;
-    padding: 14px 6px;
+    display: block;
+    width: 100%;
   }
 
-  .winner-btn {
-    padding: 6px 12px;
-    font-size: 12px;
+  .match-grid thead {
+    display: none;
+    /* labels come from data-label */
   }
 
+  /* each game = a card */
+  .match-grid tbody tr {
+    border: 1px solid rgba(74, 222, 128, 0.2);
+    background: rgba(22, 163, 74, 0.07);
+    border-radius: 14px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .match-grid tbody tr:hover {
+    background: rgba(22, 163, 74, 0.07);
+    /* neutralize hover on touch */
+  }
+
+  .match-grid tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* default cell: label left, control right */
+  .match-grid td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: none;
+    text-align: right;
+    font-size: 14px;
+  }
+
+  .match-grid td::before {
+    content: attr(data-label);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #4ade80;
+    text-align: left;
+    flex-shrink: 0;
+  }
+
+  /* first cell ("Game 1") is the card header */
+  .match-grid td:first-child {
+    justify-content: flex-start;
+    font-size: 15px;
+    font-weight: 800;
+    color: white;
+    padding-top: 0;
+    padding-bottom: 12px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid rgba(74, 222, 128, 0.15);
+  }
+
+  .match-grid td:first-child::before {
+    content: none;
+  }
+
+  /* ── Location & Opponent cells: label stacked over full-width select ── */
+  .match-grid td:nth-child(2),
+  .match-grid td:nth-child(3) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    text-align: left;
+  }
+
+  /* selects: full width, proper touch size */
   .match-grid select {
-    font-size: 12px;
-    padding: 0 8px;
+    flex: none;
+    width: 100%;
+    max-width: none;
+    height: 50px;
+    font-size: 16px;
+    padding: 0 36px 0 14px;
+    background-position: right 14px center;
+  }
+
+
+
+  /* winner buttons: bigger tap targets */
+  .winner-btn {
+    padding: 13px 20px;
+    font-size: 14px;
+    min-width: 130px;
+    min-height: 48px;
+  }
+
+  /* footer: just the Add Game button, no cell chrome */
+  .match-grid tfoot td {
+    padding: 0;
+    border-top: none;
+  }
+
+  .match-grid tfoot td::before {
+    content: none;
+  }
+
+  .table-picker {
+    gap: 0.75rem;
+  }
+
+  .table-card {
+    flex: 1 1 calc(50% - 0.75rem);
+    padding: 0.875rem 1rem;
   }
 }

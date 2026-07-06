@@ -100,7 +100,7 @@ export function MatchPlay() {
 
   useEffect(() => {
     if (!token) return
-    fetch(`{api}/p_tables`, {
+    fetch(`${api}/p_tables`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
@@ -120,7 +120,7 @@ export function MatchPlay() {
     setPredictions([])
 
     try {
-      const geoRes = await fetch(`{api}/api/search/geocode`, {
+      const geoRes = await fetch(`${api}/api/search/geocode`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ address })
@@ -199,8 +199,8 @@ export function MatchPlay() {
               <tbody>
                 {games.map((game) => (
                   <tr key={game.id}>
-                    <td>Game {game.id}</td>
-                    <td>
+                    <td data-label="Game">Game {game.id}</td>
+                    <td data-label="Location">
                       <select
                         value={game.table_id ?? ""}
                         onChange={(e) => updateGame(game.id, 'table_id', e.target.value)}
@@ -216,7 +216,7 @@ export function MatchPlay() {
                         ))}
                       </select>
                     </td>
-                    <td>
+                    <td data-label="Opponent">
                       <select
                         value={game.opponent_id ?? ""}
                         onChange={(e) => updateGame(game.id, 'opponent_id', e.target.value)}
@@ -229,7 +229,7 @@ export function MatchPlay() {
                         ))}
                       </select>
                     </td>
-                    <td>
+                    <td data-label="You win?">
                       <button
                         className={`winner-btn ${game.winner === user?.id ? 'active' : ''}`}
                         onClick={() => { if (user?.id) updateGame(game.id, 'winner', user.id) }}
@@ -237,7 +237,7 @@ export function MatchPlay() {
                         {user?.first_name}
                       </button>
                     </td>
-                    <td>
+                    <td data-label="They win?">
                       <button
                         className={`winner-btn ${game.winner === game.opponent_id ? 'active' : ''}`}
                         onClick={() => updateGame(game.id, 'winner', game.opponent_id!)}
@@ -251,7 +251,7 @@ export function MatchPlay() {
               </tbody>
               <tfoot>
                 <tr>
-                  <td colSpan={4}>
+                  <td colSpan={5}>
                     <button className="add-game-btn" onClick={addGame}>+ Add Game</button>
                   </td>
                 </tr>

@@ -93,7 +93,7 @@ export function Login() {
               <button type='button' className='eye-toggle' onClick={() => setShowPassword(!showPassword)}>{showPassword ? <EyeOff size={16} /> : <Eye size={16} />}</button>
             </div>
             <div className='login-buttons-container'>
-              <button type='submit' disabled={loading}>
+              <button className='login-button' type='submit' disabled={loading}>
                 {loading ? 'Logging in...' : 'Login'}
               </button>
               <span className="auth-divider">or</span>
