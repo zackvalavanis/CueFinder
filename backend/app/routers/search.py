@@ -47,7 +47,7 @@ async def nearby(body: LatLng):
             "https://maps.googleapis.com/maps/api/place/nearbysearch/json",
             params={
                 "location": f"{body.lat},{body.lng}",
-                "rankby": "distance",  # replaces radius
+                "radius": "1000",
                 "keyword": keyword,
                 "key": GOOGLE_API_KEY,
             },

@@ -16,6 +16,8 @@ export function Results() {
   const [page, setPage] = useState(1)
   const ITEMS_PER_PAGE = 5
 
+  console.log(results)
+
   useEffect(() => {
     if (!token) return
     fetch(`${api}/p_tables`, {
