@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import './Main.css'
 import { useAuth } from '../Components/useAuth'
 import type { Leaderboard } from '../../types/types'
+import { useGeolocation } from '../Hooks/useGeolocation'
 
 export function Main() {
   const navigate = useNavigate()
@@ -15,6 +16,8 @@ export function Main() {
   const { user } = useAuth()
   const [leaderboard, setLeaderboard] = useState<Leaderboard[]>([])
   // const [searchName, setSearchName] = useState<string | null>('')
+  const { coords, locating, error: geoError, getLocation } = useGeolocation()
+
 
   useEffect(() => {
     const hash = window.location.hash
@@ -107,6 +110,15 @@ export function Main() {
     }
   }
 
+  const handleSearchNearby = () => {
+    console.log("Searching Nearby...")
+    getLocation()
+  }
+
+
+  console.log('coords:', coords, 'locating:', locating, 'geoError:', geoError)
+
+
   return (
     <div className="main-page">
       <section id='search-tables' className="section1">
@@ -124,6 +136,7 @@ export function Main() {
             <button onClick={handleSearch} disabled={loading}>
               {loading ? '...' : 'Search'}
             </button>
+            <button onClick={handleSearchNearby}>Search Nearby</button>
           </div>
           {predictions.length > 0 && (
             <ul className="autocomplete-list">
