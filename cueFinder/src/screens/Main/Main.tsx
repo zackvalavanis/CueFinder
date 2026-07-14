@@ -5,6 +5,8 @@ import { useAuth } from '../Components/useAuth'
 import type { Leaderboard } from '../../types/types'
 import { useGeolocation } from '../Hooks/useGeolocation'
 
+type Coords = { lat: number; lng: number }
+
 export function Main() {
   const navigate = useNavigate()
   const api = import.meta.env.VITE_BACKEND_API
@@ -16,7 +18,8 @@ export function Main() {
   const { user } = useAuth()
   const [leaderboard, setLeaderboard] = useState<Leaderboard[]>([])
   // const [searchName, setSearchName] = useState<string | null>('')
-  const { coords, locating, error: geoError, getLocation } = useGeolocation()
+  const { coords, error: geoError, getLocation } = useGeolocation()
+
 
   useEffect(() => {
     return () => {
@@ -135,15 +138,12 @@ export function Main() {
     setError("")
 
     try {
-      let locationResponse = null;
-      try {
-        locationResponse = await getLocation()
-      } catch (geoErr) {
-        console.warn("getLocation() failed, falling back to state coords:", geoErr);
+      if (!coords?.lat || !coords.lng) {
+        await getLocation()
       }
 
-      const lat = locationResponse?.lat || coords?.lat
-      const lng = locationResponse?.lng || coords?.lng
+      const lat = coords?.lat;
+      const lng = coords?.lng;
 
       if (!lat || !lng) {
         throw new Error(geoError || "Couldnt determine coordinates, enter manually")

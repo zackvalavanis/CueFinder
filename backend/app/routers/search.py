@@ -42,6 +42,7 @@ async def geocode(body: AddressRequest):
 @router.post("/nearby")
 async def nearby(body: LatLng):
     keyword = body.name if body.name else "billiards pool table"
+
     async with httpx.AsyncClient() as client:
         res = await client.get(
             "https://maps.googleapis.com/maps/api/place/nearbysearch/json",
@@ -52,10 +53,19 @@ async def nearby(body: LatLng):
                 "key": GOOGLE_API_KEY,
             },
         )
+
     data = res.json()
 
+    # FIX: Stop swallowing the error. Bubble Google's exact text up to your UI/Logs
     if data["status"] not in ("OK", "ZERO_RESULTS"):
-        raise HTTPException(status_code=400, detail="Places search failed")
+        error_msg = data.get("error_message", "No message provided")
+        print(
+            f"--- PRODUCTION GOOGLE FAILURE --- Status: {data['status']} | Message: {error_msg}"
+        )
+        raise HTTPException(
+            status_code=400,
+            detail=f"Places search failed: {data['status']} - {error_msg}",
+        )
 
     results = []
     for place in data.get("results", [])[:20]:
