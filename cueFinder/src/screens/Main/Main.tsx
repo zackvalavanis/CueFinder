@@ -163,7 +163,8 @@ export function Main() {
       navigate('/results', { state: { results } })
     } catch (err) {
       console.error(err)
-      setError(err.message || "An unexpected error occurred.");
+      const message = err instanceof Error ? err.message : String(err) || "An unexpected error occurred."
+      setError(message)
     } finally {
       setLoading(false)
     }
