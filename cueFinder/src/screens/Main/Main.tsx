@@ -5,8 +5,6 @@ import { useAuth } from '../Components/useAuth'
 import type { Leaderboard } from '../../types/types'
 import { useGeolocation } from '../Hooks/useGeolocation'
 
-type Coords = { lat: number; lng: number }
-
 export function Main() {
   const navigate = useNavigate()
   const api = import.meta.env.VITE_BACKEND_API
