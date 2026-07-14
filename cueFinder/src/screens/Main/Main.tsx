@@ -18,6 +18,24 @@ export function Main() {
   // const [searchName, setSearchName] = useState<string | null>('')
   const { coords, locating, error: geoError, getLocation } = useGeolocation()
 
+  useEffect(() => {
+    return () => {
+      setLoading(false); // Clean up and reset loading state when leaving the page
+    };
+  }, []);
+
+  useEffect(() => {
+    const refreshLocation = async () => {
+      try {
+        await getLocation();
+      } catch (e) {
+        console.warn("Initial background location fetch failed:", e);
+      }
+    };
+
+    refreshLocation();
+  }, [getLocation]);
+
 
   useEffect(() => {
     const hash = window.location.hash
@@ -110,13 +128,48 @@ export function Main() {
     }
   }
 
-  const handleSearchNearby = () => {
+  const handleSearchNearby = async () => {
+    if (loading) return
     console.log("Searching Nearby...")
-    getLocation()
+    setLoading(true)
+    setError("")
+
+    try {
+      let locationResponse = null;
+      try {
+        locationResponse = await getLocation()
+      } catch (geoErr) {
+        console.warn("getLocation() failed, falling back to state coords:", geoErr);
+      }
+
+      const lat = locationResponse?.lat || coords?.lat
+      const lng = locationResponse?.lng || coords?.lng
+
+      if (!lat || !lng) {
+        throw new Error(geoError || "Couldnt determine coordinates, enter manually")
+      }
+      const nearbyRes = await fetch(`${api}/api/search/nearby`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          lat,
+          lng,
+          name: predictions.length === 0 ? address : null
+        })
+      })
+
+      if (!nearbyRes.ok) throw new Error('Could not fetch nearby tables')
+
+      const { results } = await nearbyRes.json()
+
+      navigate('/results', { state: { results } })
+    } catch (err) {
+      console.error(err)
+      setError(err.message || "An unexpected error occurred.");
+    } finally {
+      setLoading(false)
+    }
   }
-
-
-  console.log('coords:', coords, 'locating:', locating, 'geoError:', geoError)
 
 
   return (
