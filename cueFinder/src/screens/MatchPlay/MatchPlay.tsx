@@ -5,6 +5,7 @@ import { useAuth } from "../Components/useAuth"
 import type { Game } from "../../types/types"
 import { useLocation, useNavigate } from "react-router"
 import type { PoolTable } from "../../types/types"
+import { useGeolocation } from "../Hooks/useGeolocation"
 
 
 export function MatchPlay() {
@@ -22,6 +23,27 @@ export function MatchPlay() {
   const player_id: string | null = location.state?.player_id
   const [games, setGames] = useState<Game[]>([{ id: 1, opponent_id: player_id ?? null, winner: null, session_id: null, table_id: table?.place_id ?? null }])
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const { coords, error: geoError, getLocation } = useGeolocation()
+
+
+
+  useEffect(() => {
+    return () => {
+      setLoading(false); // Clean up and reset loading state when leaving the page
+    };
+  }, []);
+
+  useEffect(() => {
+    const refreshLocation = async () => {
+      try {
+        await getLocation();
+      } catch (e) {
+        console.warn("Initial background location fetch failed:", e);
+      }
+    };
+
+    refreshLocation();
+  }, [getLocation]);
 
 
   useEffect(() => {
@@ -146,6 +168,48 @@ export function MatchPlay() {
   }
 
 
+  const handleSearchNearby = async () => {
+    if (loading) return
+    console.log("Searching Nearby...")
+    setLoading(true)
+    setError("")
+
+    try {
+      if (!coords?.lat || !coords.lng) {
+        await getLocation()
+      }
+
+      const lat = coords?.lat;
+      const lng = coords?.lng;
+
+      if (!lat || !lng) {
+        throw new Error(geoError || "Couldnt determine coordinates, enter manually")
+      }
+      const nearbyRes = await fetch(`${api}/api/search/nearby`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          lat,
+          lng,
+          name: predictions.length === 0 ? address : null
+        })
+      })
+
+      if (!nearbyRes.ok) throw new Error('Could not fetch nearby tables')
+
+      const { results } = await nearbyRes.json()
+
+      navigate('/results', { state: { results } })
+    } catch (err) {
+      console.error(err)
+      const message = err instanceof Error ? err.message : String(err) || "An unexpected error occurred."
+      setError(message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+
   return (
     <div className='match-play-page'>
       <div className='players-container'>
@@ -164,6 +228,9 @@ export function MatchPlay() {
               />
               <button onClick={handleSearch} disabled={loading}>
                 {loading ? '...' : 'Search'}
+              </button>
+              <button onClick={handleSearchNearby} disabled={loading}>
+                {loading ? '...' : 'Search Nearby'}
               </button>
             </div>
             {predictions.length > 0 && (
