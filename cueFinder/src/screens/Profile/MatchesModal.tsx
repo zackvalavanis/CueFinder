@@ -6,8 +6,6 @@ import './MatchesModal.css'
 export function MatchesModal({ show, onClose, matches }: MatchesModalProps) {
   if (!show || !matches) return null
 
-  console.log(matches)
-
   return (
     <div className='matches-modal-overlay'>
       <div className='matches-modal'>

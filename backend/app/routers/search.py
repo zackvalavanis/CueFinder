@@ -32,7 +32,7 @@ async def geocode(body: AddressRequest):
             params={"address": body.address, "key": GOOGLE_API_KEY},
         )
     data = res.json()
-    if data["status"] != "OK":
+    if data["status"] != "OK" or not data.get("results"):
         raise HTTPException(status_code=400, detail=f"Geocode failed: {data['status']}")
 
     location = data["results"][0]["geometry"]["location"]

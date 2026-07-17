@@ -5,7 +5,6 @@ import { useNavigate } from "react-router";
 import { toast } from "react-toastify"
 import './Login.css'
 import { Eye, EyeOff } from 'lucide-react'
-// import { GoogleLogin } from '@react-oauth/google'
 
 export function Login() {
   const api = import.meta.env.VITE_BACKEND_API
@@ -41,11 +40,10 @@ export function Login() {
       }
 
       if (!data?.access_token) {
-        console.log("No token returned from the server")
+        toast.error("No token returned from the server")
         return
       }
 
-      console.log("LOGIN SUCCESS", data)
       login(data.access_token)
       toast.success(`Logged in Successfully ${data.first_name}`)
 

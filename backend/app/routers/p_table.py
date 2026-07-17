@@ -58,8 +58,12 @@ def new_p_table(
 
 
 @router.delete("/p_tables/{id}", response_model=PTablesResponse)
-def delete_p_table(id: UUID, db: Session = Depends(get_db)):
-    db_p_table = db.query(P_Table).filter(P_Table.id == id).first()
+def delete_p_table(
+    id: UUID, user: User = Depends(get_current_user), db: Session = Depends(get_db)
+):
+    db_p_table = (
+        db.query(P_Table).filter(P_Table.id == id, P_Table.user_id == user.id).first()
+    )
 
     if not db_p_table:
         raise HTTPException(status_code=404, detail="Pool table not found.")

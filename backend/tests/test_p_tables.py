@@ -1,26 +1,21 @@
-from fastapi.testclient import TestClient
-from app.main import app
-from app.database import get_db
 import pytest
 
 
-client = TestClient(app)
-
-
 @pytest.fixture
-def auth_token():
+def auth_token(client):
     client.post(
         "/users",
         json={
-            "first_name": "Zack",
-            "last_name": "Valavanis",
-            "email": "zval321@gmail.com",
+            "first_name": "Test",
+            "last_name": "Player",
+            "email": "test.player@example.com",
             "password": "password123",
         },
     )
 
     login_response = client.post(
-        "/auth/login", json={"email": "zval321@gmail.com", "password": "password123"}
+        "/auth/login",
+        json={"email": "test.player@example.com", "password": "password123"},
     )
 
     token = login_response.json()["access_token"]
@@ -31,23 +26,14 @@ def auth_token():
             "rating": 1.2,
             "location": "Chicago",
             "table_size": 1.2,
+            "place_id": "test-place-1",
         },
         headers={"Authorization": f"Bearer {token}"},
     )
-    yield token
-
-    db = next(get_db())
-    from app.models.user import User
-    from app.models.p_table import P_Table
-
-    user = db.query(User).filter(User.email == "zval321@gmail.com").first()
-    db.query(P_Table).filter(P_Table.user_id == user.id).delete()
-    db.query(User).filter(User.email == "zval321@gmail.com").delete()
-    db.commit()
+    return token
 
 
-def test_get_p_tables(auth_token):
-
+def test_get_p_tables(client, auth_token):
     response = client.get(
         "/p_tables", headers={"Authorization": f"Bearer {auth_token}"}
     )
@@ -56,10 +42,15 @@ def test_get_p_tables(auth_token):
     assert isinstance(response.json(), list)
 
 
-def test_get_p_table(auth_token):
+def test_get_p_table(client, auth_token):
     new_table = client.post(
         "/p_tables",
-        json={"rating": 1.2, "location": "Chicago", "table_size": 1.2},
+        json={
+            "rating": 1.2,
+            "location": "Chicago",
+            "table_size": 1.2,
+            "place_id": "test-place-2",
+        },
         headers={"Authorization": f"Bearer {auth_token}"},
     )
     table_id = new_table.json()["id"]
@@ -71,7 +62,7 @@ def test_get_p_table(auth_token):
     assert isinstance(response.json(), dict)
 
 
-def test_delete_pool_table(auth_token):
+def test_delete_pool_table(client, auth_token):
     table_id = client.get(
         "/p_tables", headers={"Authorization": f"Bearer {auth_token}"}
     ).json()[0]["id"]

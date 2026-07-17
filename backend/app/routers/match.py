@@ -54,7 +54,7 @@ def create_match(
     db: Session = Depends(get_db),
 ):
     new_match = Match(
-        sessiod_id=match.session_id,
+        session_id=match.session_id,
         player1_id=user.id,
         player2_id=match.player2_id,
         winner_id=match.winner_id,
@@ -115,8 +115,16 @@ def get_record(user: User = Depends(get_current_user), db: Session = Depends(get
 
 
 @router.post("/matches/session")
-def create_session(matches: list[MatchesCreate], db: Session = Depends(get_db)):
+def create_session(
+    matches: list[MatchesCreate],
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
     for m in matches:
+        if m.player1_id != user.id:
+            raise HTTPException(
+                status_code=403, detail="Cannot create matches for another player"
+            )
         match = Match(
             session_id=m.session_id,
             player1_id=m.player1_id,
@@ -127,7 +135,7 @@ def create_session(matches: list[MatchesCreate], db: Session = Depends(get_db)):
         )
         db.add(match)
     db.commit()
-    return {"Saved:", len(matches)}
+    return {"saved": len(matches)}
 
 
 @router.get("/leaderboard")

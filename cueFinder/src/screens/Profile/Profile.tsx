@@ -48,17 +48,14 @@ export function Profile() {
 
   useEffect(() => {
     if (!token) return
-    fetch(`${api}p_tables`, {
+    fetch(`${api}/p_tables`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
       .then((data: PTablesResponse[]) => {
-        console.log(data)
         setPoolTables(data)
       })
   }, [token])
-
-  console.log(poolTables)
 
   useEffect(() => {
     if (!token) return

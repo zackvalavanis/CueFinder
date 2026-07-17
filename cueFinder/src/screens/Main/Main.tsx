@@ -1,42 +1,19 @@
 import { useNavigate } from 'react-router'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import './Main.css'
 import { useAuth } from '../Components/useAuth'
 import type { Leaderboard } from '../../types/types'
-import { useGeolocation } from '../Hooks/useGeolocation'
+import { useTableSearch } from '../Hooks/useTableSearch'
 
 export function Main() {
   const navigate = useNavigate()
   const api = import.meta.env.VITE_BACKEND_API
-  const [address, setAddress] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [predictions, setPredictions] = useState<{ description: string, place_id: string }[]>([])
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const { user } = useAuth()
   const [leaderboard, setLeaderboard] = useState<Leaderboard[]>([])
-  // const [searchName, setSearchName] = useState<string | null>('')
-  const { coords, error: geoError, getLocation } = useGeolocation()
-
-
-  useEffect(() => {
-    return () => {
-      setLoading(false); // Clean up and reset loading state when leaving the page
-    };
-  }, []);
-
-  useEffect(() => {
-    const refreshLocation = async () => {
-      try {
-        await getLocation();
-      } catch (e) {
-        console.warn("Initial background location fetch failed:", e);
-      }
-    };
-
-    refreshLocation();
-  }, [getLocation]);
-
+  const {
+    address, setAddress, loading, error, predictions, setPredictions,
+    handleSelect, handleSearch, handleSearchNearby,
+  } = useTableSearch(api)
 
   useEffect(() => {
     const hash = window.location.hash
@@ -48,128 +25,20 @@ export function Main() {
     }
   }, [])
 
-
-  useEffect(() => {
-    if (debounceRef.current) clearTimeout(debounceRef.current)
-
-    if (!address.trim() || address.length < 3) return
-
-    debounceRef.current = setTimeout(async () => {
-      const res = await fetch(`${api}/api/search/autocomplete?input=${encodeURIComponent(address)}`)
-      const data = await res.json()
-      setPredictions(data.predictions)
-    }, 300)
-
-    return () => {
-      if (debounceRef.current) {
-        clearTimeout(debounceRef.current)
-        debounceRef.current = null
-      }
-    }
-  }, [address])
-
   useEffect(() => {
     fetch(`${api}/leaderboard`)
       .then(res => res.json())
       .then(data => setLeaderboard(data))
       .catch(err => console.error(err))
-  }, [])
-
-  console.log(leaderboard)
-
-  const handleSelect = (description: string) => {
-    setAddress(description)
-    setPredictions([])
-  }
-
-  const handleSearch = async () => {
-    if (!address.trim()) return
-    setLoading(true)
-    setError('')
-    setPredictions([])
-
-    try {
-      const geoRes = await fetch(`${api}/api/search/geocode`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ address })
-      })
-      if (!geoRes.ok) throw new Error('Could not find that address')
-      const { lat, lng } = await geoRes.json()
-
-      const nearbyRes = await fetch(`${api}/api/search/nearby`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lat, lng, name: predictions.length === 0 ? address : null })
-      })
-      if (!nearbyRes.ok) throw new Error('Could not fetch nearby tables')
-      const { results } = await nearbyRes.json()
-
-      navigate('/results', { state: { results } })
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
+  }, [api])
 
   const HandleFlipLeaderboards = async () => {
-    console.log('flipping')
     try {
-      const res = await fetch(`${api}/matches`, {
-        method: 'GET'
-      })
-
-      const data = await res.json()
-      console.log(data)
+      await fetch(`${api}/matches`, { method: 'GET' })
     } catch (error) {
       console.error(error)
     }
   }
-
-  const handleSearchNearby = async () => {
-    if (loading) return
-    console.log("Searching Nearby...")
-    setLoading(true)
-    setError("")
-
-    try {
-      if (!coords?.lat || !coords.lng) {
-        await getLocation()
-      }
-
-      const lat = coords?.lat;
-      const lng = coords?.lng;
-
-      if (!lat || !lng) {
-        throw new Error(geoError || "Couldnt determine coordinates, enter manually")
-      }
-      const nearbyRes = await fetch(`${api}/api/search/nearby`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          lat,
-          lng,
-          name: predictions.length === 0 ? address : null
-        })
-      })
-
-      if (!nearbyRes.ok) throw new Error('Could not fetch nearby tables')
-
-      const { results } = await nearbyRes.json()
-
-      navigate('/results', { state: { results } })
-    } catch (err) {
-      console.error(err)
-      const message = err instanceof Error ? err.message : String(err) || "An unexpected error occurred."
-      setError(message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
 
   return (
     <div className="main-page">

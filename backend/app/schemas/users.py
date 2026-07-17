@@ -13,9 +13,11 @@ class UserBase(BaseModel):
 
 class UserPublic(BaseModel):
     id: UUID
-    profile_phot: str | None = None
+    profile_photo: str | None = None
     first_name: str
     last_name: str
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UserUpdate(BaseModel):

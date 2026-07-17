@@ -11,12 +11,9 @@ export function Results() {
   const location = useLocation()
   const navigate = useNavigate()
   const results: PoolTable[] = location.state?.results ?? []
-  console.log(results)
   const [likedIds, setLikedIds] = useState<Set<string>>(new Set<string>())
   const [page, setPage] = useState(1)
   const ITEMS_PER_PAGE = 5
-
-  console.log(results)
 
   useEffect(() => {
     if (!token) return
@@ -30,9 +27,6 @@ export function Results() {
         }
       })
   }, [token])
-
-  console.log(results)
-
 
   const LikeTable = async (table: PoolTable) => {
     try {

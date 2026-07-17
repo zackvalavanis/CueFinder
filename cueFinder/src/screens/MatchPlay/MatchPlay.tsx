@@ -1,70 +1,27 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import type { PTablesResponse, PublicUser } from "../../types/types"
 import './MatchPlay.css'
 import { useAuth } from "../Components/useAuth"
 import type { Game } from "../../types/types"
-import { useLocation, useNavigate } from "react-router"
+import { useLocation } from "react-router"
 import type { PoolTable } from "../../types/types"
-import { useGeolocation } from "../Hooks/useGeolocation"
+import { useTableSearch } from "../Hooks/useTableSearch"
 
 
 export function MatchPlay() {
-  const navigate = useNavigate()
   const api = import.meta.env.VITE_BACKEND_API
-  const [address, setAddress] = useState('')
-  const [error, setError] = useState('')
-  const [predictions, setPredictions] = useState<{ description: string, place_id: string }[]>([])
   const [players, setPlayers] = useState<PublicUser[]>([])
-  const [loading, setLoading] = useState(false)
+  const [playersLoading, setPlayersLoading] = useState(false)
   const { user, token } = useAuth()
   const location = useLocation()
   const [poolTables, setPoolTables] = useState<PTablesResponse[]>([])
   const table: PoolTable = location.state?.table
   const player_id: string | null = location.state?.player_id
   const [games, setGames] = useState<Game[]>([{ id: 1, opponent_id: player_id ?? null, winner: null, session_id: null, table_id: table?.place_id ?? null }])
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const { coords, error: geoError, getLocation } = useGeolocation()
-
-
-
-  useEffect(() => {
-    return () => {
-      setLoading(false); // Clean up and reset loading state when leaving the page
-    };
-  }, []);
-
-  useEffect(() => {
-    const refreshLocation = async () => {
-      try {
-        await getLocation();
-      } catch (e) {
-        console.warn("Initial background location fetch failed:", e);
-      }
-    };
-
-    refreshLocation();
-  }, [getLocation]);
-
-
-  useEffect(() => {
-    if (debounceRef.current) clearTimeout(debounceRef.current)
-
-    if (!address.trim() || address.length < 3) return
-
-    debounceRef.current = setTimeout(async () => {
-      const res = await fetch(`${api}/api/search/autocomplete?input=${encodeURIComponent(address)}`)
-      const data = await res.json()
-      setPredictions(data.predictions)
-    }, 300)
-
-    return () => {
-      if (debounceRef.current) {
-        clearTimeout(debounceRef.current)
-        debounceRef.current = null
-      }
-    }
-  }, [address])
-
+  const {
+    address, setAddress, loading, error, predictions, setPredictions,
+    handleSelect, handleSearch, handleSearchNearby,
+  } = useTableSearch(api)
 
   const addGame = () => {
     setGames(prev => [...prev, { id: prev.length + 1, opponent_id: player_id ?? null, winner: null, session_id: null, table_id: null }])
@@ -89,7 +46,6 @@ export function MatchPlay() {
         winner_id: g.winner,
         p_table_id: poolTables.find(t => t.place_id === g.table_id)?.id ?? null
       }))
-    console.log("payload:", JSON.stringify(payload, null, 2))
     if (payload.length === 0) return
 
     const res = await fetch(`${api}/matches/session`, {
@@ -106,7 +62,7 @@ export function MatchPlay() {
 
   useEffect(() => {
     const handleUserFetch = async () => {
-      setLoading(true)
+      setPlayersLoading(true)
       try {
         const res = await fetch(`${api}/users`)
         const data = await res.json()
@@ -114,11 +70,11 @@ export function MatchPlay() {
       } catch (error) {
         console.error(error)
       } finally {
-        setLoading(false)
+        setPlayersLoading(false)
       }
     }
     handleUserFetch()
-  }, [])
+  }, [api])
 
   useEffect(() => {
     if (!token) return
@@ -127,87 +83,7 @@ export function MatchPlay() {
     })
       .then(res => res.json())
       .then(data => setPoolTables(data))
-  }, [token])
-
-
-  const handleSelect = (description: string) => {
-    setAddress(description)
-    setPredictions([])
-  }
-
-  const handleSearch = async () => {
-    if (!address.trim()) return
-    setLoading(true)
-    setError('')
-    setPredictions([])
-
-    try {
-      const geoRes = await fetch(`${api}/api/search/geocode`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ address })
-      })
-      if (!geoRes.ok) throw new Error('Could not find that address')
-      const { lat, lng } = await geoRes.json()
-
-      const nearbyRes = await fetch(`${api}/api/search/nearby`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lat, lng, name: predictions.length === 0 ? address : null })
-      })
-      if (!nearbyRes.ok) throw new Error('Could not fetch nearby tables')
-      const { results } = await nearbyRes.json()
-
-      navigate('/results', { state: { results } })
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-
-  const handleSearchNearby = async () => {
-    if (loading) return
-    console.log("Searching Nearby...")
-    setLoading(true)
-    setError("")
-
-    try {
-      if (!coords?.lat || !coords.lng) {
-        await getLocation()
-      }
-
-      const lat = coords?.lat;
-      const lng = coords?.lng;
-
-      if (!lat || !lng) {
-        throw new Error(geoError || "Couldnt determine coordinates, enter manually")
-      }
-      const nearbyRes = await fetch(`${api}/api/search/nearby`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          lat,
-          lng,
-          name: predictions.length === 0 ? address : null
-        })
-      })
-
-      if (!nearbyRes.ok) throw new Error('Could not fetch nearby tables')
-
-      const { results } = await nearbyRes.json()
-
-      navigate('/results', { state: { results } })
-    } catch (err) {
-      console.error(err)
-      const message = err instanceof Error ? err.message : String(err) || "An unexpected error occurred."
-      setError(message)
-    } finally {
-      setLoading(false)
-    }
-  }
+  }, [token, api])
 
 
   return (
@@ -252,7 +128,7 @@ export function MatchPlay() {
 
 
         <div className='match-grid'>
-          {loading ? <p>Loading...</p> : (
+          {playersLoading ? <p>Loading...</p> : (
             <table>
               <thead>
                 <tr>

@@ -11,7 +11,6 @@ import 'react-toastify/dist/ReactToastify.css'
 import { Profile } from "./screens/Profile/Profile"
 import { Results } from "./screens/Results/Results"
 import { AuthCallback } from "./screens/Auth/AuthCallback"
-import { GoogleOAuthProvider } from "@react-oauth/google"
 import { MatchPlay } from "./screens/MatchPlay/MatchPlay"
 
 
@@ -42,10 +41,8 @@ function App() {
   return (
     <>
       <AuthProvider>
-        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-          <ToastContainer position="top-right" autoClose={3000} />
-          <RouterProvider router={router} />
-        </GoogleOAuthProvider>
+        <ToastContainer position="top-right" autoClose={3000} />
+        <RouterProvider router={router} />
       </AuthProvider >
     </>
   )
