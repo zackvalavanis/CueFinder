@@ -6,6 +6,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 1rem;
   z-index: 1000;
 }
 
@@ -16,6 +17,8 @@
   padding: 2rem;
   width: 100%;
   max-width: 520px;
+  max-height: 85vh;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
@@ -84,14 +87,18 @@
 
 @media (max-width: 768px) {
   .matches-modal {
-    margin: 1rem;
     padding: 1.5rem;
+    max-height: 90vh;
   }
 
   .modal-game-row {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
+  }
+
+  .modal-game-row span:nth-child(2) {
+    text-align: left;
   }
 
   .modal-game-row span:last-child {

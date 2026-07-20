@@ -12,6 +12,7 @@ export function MatchPlay() {
   const api = import.meta.env.VITE_BACKEND_API
   const [players, setPlayers] = useState<PublicUser[]>([])
   const [playersLoading, setPlayersLoading] = useState(false)
+  const [savingSession, setSavingSession] = useState(false)
   const { user, token } = useAuth()
   const location = useLocation()
   const [poolTables, setPoolTables] = useState<PTablesResponse[]>([])
@@ -34,7 +35,7 @@ export function MatchPlay() {
   }
 
   const saveSession = async () => {
-    if (!user) return
+    if (!user || savingSession) return
     const session_id = crypto.randomUUID()
 
     const payload = games
@@ -48,15 +49,20 @@ export function MatchPlay() {
       }))
     if (payload.length === 0) return
 
-    const res = await fetch(`${api}/matches/session`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify(payload)
-    })
+    setSavingSession(true)
+    try {
+      const res = await fetch(`${api}/matches/session`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(payload)
+      })
 
-    if (res.ok) {
-      setGames([{ id: 1, opponent_id: null, winner: null, session_id: null, table_id: table?.place_id ?? null }])
-      alert("Saved Session")
+      if (res.ok) {
+        setGames([{ id: 1, opponent_id: null, winner: null, session_id: null, table_id: table?.place_id ?? null }])
+        alert("Saved Session")
+      }
+    } finally {
+      setSavingSession(false)
     }
   }
 
@@ -202,7 +208,9 @@ export function MatchPlay() {
             </table>
           )}
         </div>
-        <button className="save-btn" onClick={saveSession}>Save Session</button>
+        <button className="save-btn" onClick={saveSession} disabled={savingSession}>
+          {savingSession ? 'Saving...' : 'Save Session'}
+        </button>
       </div>
     </div>
   )
