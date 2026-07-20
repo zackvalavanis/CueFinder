@@ -64,7 +64,7 @@ export function Profile() {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.profile_photo) setSavedPhotoUrl(`http://localhost:8000${data.profile_photo}`)
+        if (data.profile_photo) setSavedPhotoUrl(`${api}${data.profile_photo}`)
         setFormData({ first_name: data.first_name, last_name: data.last_name, email: data.email })
       })
   }, [token])
@@ -106,7 +106,7 @@ export function Profile() {
       });
       if (res.ok) {
         const data = await res.json();
-        setSavedPhotoUrl(`${api}}${data.profile_photo_url}?t=${Date.now()}`)
+        setSavedPhotoUrl(`${api}${data.profile_photo_url}?t=${Date.now()}`)
         setFile(null)
         setPreview(null)
         alert("Upload Completed")
