@@ -4,6 +4,8 @@ import './Main.css'
 import { useAuth } from '../Components/useAuth'
 import type { Leaderboard } from '../../types/types'
 import { useTableSearch } from '../Hooks/useTableSearch'
+import cue_finder from "../../assets/cuefinder_logo.svg"
+
 
 export function Main() {
   const navigate = useNavigate()
@@ -43,7 +45,7 @@ export function Main() {
   return (
     <div className="main-page">
       <section id='search-tables' className="section1">
-        <h1>Find Pool Tables Near You</h1>
+        <img className='svg-logo' src={cue_finder}></img>
         <div className="search-wrapper">
           <div className="search_button">
             <input

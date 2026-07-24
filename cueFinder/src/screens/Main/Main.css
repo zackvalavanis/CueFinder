@@ -5,6 +5,7 @@
   width: 100%;
   font-family: 'Inter', 'Segoe UI', sans-serif;
   color: white;
+  background-color: #1a1a1a;
 }
 
 /* ── Hero ── */
@@ -15,21 +16,16 @@
   justify-content: center;
   height: 100vh;
   width: 100%;
-  gap: 4.5rem;
 }
 
-.section1 h1 {
-  font-size: 64px;
-  font-weight: 800;
-  text-align: center;
-  color: rgba(0, 0, 0, 0.665);
-  letter-spacing: -2px;
-  line-height: 1.1;
-  max-width: 700px;
+.svg-logo {
+  height: 1000px;
+  width: 800px;
 }
 
 .search_button {
   display: flex;
+  margin-bottom: 300px;
   gap: 0;
   align-items: center;
   border-radius: 10px;
@@ -218,7 +214,7 @@
   font-size: 32px;
   font-weight: 800;
   letter-spacing: -1px;
-  color: black;
+  color: white;
 }
 
 .leaderBoards table {
@@ -245,7 +241,7 @@
   padding: 16px;
   font-size: 15px;
   font-weight: 500;
-  color: black;
+  color: white;
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   text-align: center;
 }
@@ -314,7 +310,7 @@
 }
 
 .player-name-leaderboard {
-  color: black;
+  color: white;
   cursor: pointer;
 }
 
@@ -347,14 +343,17 @@
 }
 
 
-
-
 @media (max-width: 768px) {
   .section1 {
     height: auto;
     min-height: 100vh;
     padding: 6rem 1.5rem;
     gap: 2.5rem;
+  }
+
+  .svg-logo {
+    width: auto;
+    height: auto;
   }
 
   .section1 h1 {
