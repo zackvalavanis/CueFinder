@@ -57,7 +57,7 @@ export function Main() {
             <button onClick={handleSearch} disabled={loading}>
               {loading ? '...' : 'Search'}
             </button>
-            <button onClick={handleSearchNearby}>Search Nearby</button>
+            {user && <button onClick={handleSearchNearby}>Search Nearby</button>}
           </div>
           {predictions.length > 0 && (
             <ul className="autocomplete-list">
